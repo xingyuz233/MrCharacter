@@ -25,7 +25,9 @@
         <activity android:name=".join_now" />
         <activity android:name=".send_code" />
         <activity android:name=".verify_code" />
-        <activity android:name=".info"></activity>
+        <activity android:name=".info" />
+        <activity android:name=".home_display" />
+        <activity android:name=".upload_edit"></activity>
     </application>
 
 </manifest>
