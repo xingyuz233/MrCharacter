@@ -1,12 +1,14 @@
 package com.example.xyzhang.testapp;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 
 /**
@@ -59,6 +61,14 @@ public class home extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
 
+        TextView getPictureBtn = (TextView) getActivity().findViewById(R.id.getPictureBtn);
+        getPictureBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), home_display.class);
+                startActivity(intent);
+            }
+        });
 
     }
 
