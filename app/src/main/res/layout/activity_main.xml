@@ -40,7 +40,7 @@
                 android:text="Join now"
                 android:textAllCaps="false"
                 android:textColor="#ffffff"
-                android:textSize="20sp"
+                android:textSize="16sp"
                 android:layout_weight="1"/>
 
             <Button
@@ -60,7 +60,7 @@
                 android:text="Sign in"
                 android:textAllCaps="false"
                 android:textColor="#0094b8"
-                android:textSize="20sp"
+                android:textSize="16sp"
                 android:layout_weight="1"/>
         </LinearLayout>
     </LinearLayout>
