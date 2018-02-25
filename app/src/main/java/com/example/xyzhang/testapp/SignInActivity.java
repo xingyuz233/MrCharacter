@@ -16,46 +16,34 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
     private EditText mPhoneNumberEditText;
     private EditText mPassWordEditText;
     private TextView mSignInBtn;
-    private String originAddress = "http://zhisms.com:8080/Server/servlet/LoginServlet";
+    private String originAddress = "http://localhost:8080/testapp/login.php";
     Handler mHandler = new Handler(){
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            String result = "";
-
             if ("OK".equals(msg.obj.toString())){
-                result = "success";
+                jumpToInfo();
             }else if ("Wrong".equals(msg.obj.toString())){
-                result = "fail";
+                //todo
             }else {
-                result = msg.obj.toString();
+                //todo
             }
-            Toast.makeText(SignInActivity.this, result, Toast.LENGTH_LONG).show();
         }
     };
 
+    private void jumpToInfo() {
+        Intent intent = new Intent(SignInActivity.this, send_code.class);
+        startActivity(intent);
+    }
+
+    private void jumpToJoinNow() {
+        Intent intent = new Intent(SignInActivity.this, join_now.class);
+        startActivity(intent);
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
-
-        TextView joinNowBtn = (TextView) findViewById(R.id.joinNowBtn);
-        joinNowBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(SignInActivity.this, join_now.class);
-                startActivity(intent);
-            }
-        });
-
-        TextView signInBtn = (TextView) findViewById(R.id.signInBtn);
-        signInBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(SignInActivity.this, send_code.class);
-                startActivity(intent);
-            }
-        });
     }
 
     @Override
@@ -63,6 +51,9 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
         switch (v.getId()){
             case R.id.signInBtn:
                 login();
+                break;
+            case R.id.joinNowBtn:
+                jumpToJoinNow();
                 break;
         }
     }
