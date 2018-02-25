@@ -1,6 +1,5 @@
 package com.example.xyzhang.testapp;
 
-import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
@@ -17,9 +16,9 @@ public class info extends AppCompatActivity implements View.OnClickListener{
 
     private FrameLayout ly_content;
 
-    private home f1;
+    private HomeFragment f1;
     private upload f2;
-    private user f3;
+    private UserFragment f3;
     private FragmentManager fragmentManager;
 
     @Override
@@ -75,7 +74,7 @@ public class info extends AppCompatActivity implements View.OnClickListener{
                 selected();
                 tabHome.setSelected(true);
                 if(f1==null){
-                    f1 = new home();
+                    f1 = new HomeFragment();
                     transaction.add(R.id.fragment_container,f1);
                 }else{
                     transaction.show(f1);
@@ -97,7 +96,7 @@ public class info extends AppCompatActivity implements View.OnClickListener{
                 selected();
                 tabUser.setSelected(true);
                 if(f3==null){
-                    f3 = new user();
+                    f3 = new UserFragment();
                     transaction.add(R.id.fragment_container, f3);
                 }else{
                     transaction.show(f3);

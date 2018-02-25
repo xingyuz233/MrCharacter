@@ -1,25 +1,23 @@
 package com.example.xyzhang.testapp;
 
 import android.content.Context;
-import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link home.OnFragmentInteractionListener} interface
+ * {@link UserFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link home#newInstance} factory method to
+ * Use the {@link UserFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class home extends Fragment {
+public class UserFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -31,7 +29,7 @@ public class home extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
-    public home() {
+    public UserFragment() {
         // Required empty public constructor
     }
 
@@ -41,11 +39,11 @@ public class home extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment home.
+     * @return A new instance of fragment UserFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static home newInstance(String param1, String param2) {
-        home fragment = new home();
+    public static UserFragment newInstance(String param1, String param2) {
+        UserFragment fragment = new UserFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -60,23 +58,13 @@ public class home extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-
-        TextView getPictureBtn = (TextView) getActivity().findViewById(R.id.getPictureBtn);
-        getPictureBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getActivity(), home_display.class);
-                startActivity(intent);
-            }
-        });
-
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_home, container, false);
+        return inflater.inflate(R.layout.fragment_user, container, false);
     }
 
     // TODO: Rename method, update argument and hook method into UI event

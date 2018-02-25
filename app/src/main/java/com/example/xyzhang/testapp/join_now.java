@@ -18,7 +18,7 @@ public class join_now extends AppCompatActivity {
         signInBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(join_now.this, sign_in.class);
+                Intent intent = new Intent(join_now.this, SignInActivity.class);
                 startActivity(intent);
             }
         });
