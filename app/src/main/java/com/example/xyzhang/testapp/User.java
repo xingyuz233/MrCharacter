@@ -1,7 +1,7 @@
 package com.example.xyzhang.testapp;
 
-/**
- * Created by XY Zhang on 2018/2/22.
+/*
+  Created by XY Zhang on 2018/2/22.
  */
 
 import java.io.Serializable;

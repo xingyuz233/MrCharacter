@@ -9,6 +9,8 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.example.xyzhang.testapp.util.HttpUtil;
+
 import java.util.HashMap;
 
 public class SignInActivity extends AppCompatActivity implements View.OnClickListener {

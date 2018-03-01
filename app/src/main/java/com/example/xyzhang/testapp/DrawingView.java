@@ -124,4 +124,8 @@ public class DrawingView extends View {
         return true;
     }
 
+    public Bitmap toBitMap() {
+        return mBitmap;
+    }
+
 }
