@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="请选择字体"
+            android:textSize="20dp"/>
+        <Spinner
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:id="@+id/spinner"
+            android:spinnerMode="dropdown"
+            android:dropDownWidth="70dp">
+        </Spinner>
+        <TextView
+            android:id="@+id/sureBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:background="@drawable/text_bg2"
+            android:layout_gravity="center_horizontal"
+            android:padding="5dip"
+            android:text="确认"
+            android:textColor="#ffffff"
+            android:textSize="20dp" />
+    </LinearLayout>
+</android.support.constraint.ConstraintLayout>
