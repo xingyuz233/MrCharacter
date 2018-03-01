@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.xyzhang.testapp.upload_edit">
+    tools:context="com.example.xyzhang.testapp.UploadEditActivity">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -54,13 +54,14 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"/>
         </LinearLayout>
-        <ImageView
+        <FrameLayout
+            android:id="@+id/drawingView"
             android:layout_width="300dp"
             android:layout_height="300dp"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
             android:layout_gravity="center_horizontal"
-            android:src="@drawable/empty" />
+            android:background="@drawable/empty" />
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

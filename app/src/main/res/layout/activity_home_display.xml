@@ -19,14 +19,14 @@
                 android:layout_height="wrap_content"
                 android:drawableLeft="@drawable/ic_chevron_left_white_40dp" />
         </LinearLayout>
-        <FrameLayout
+        <ImageView
             android:id="@+id/drawingView"
             android:layout_width="300dp"
             android:layout_height="300dp"
             android:layout_marginTop="30dp"
             android:layout_marginBottom="30dp"
             android:layout_gravity="center_horizontal"
-            android:background="@drawable/empty" />
+            android:src="@drawable/empty" />
         <TextView
             android:id="@+id/saveBtn"
             android:layout_width="wrap_content"

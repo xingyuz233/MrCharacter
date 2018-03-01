@@ -29,7 +29,7 @@
         <activity android:name=".verify_code" />
         <activity android:name=".InfoActivity" />
         <activity android:name=".HomeDisplayActivity" />
-        <activity android:name=".upload_edit"></activity>
+        <activity android:name=".UploadEditActivity"></activity>
     </application>
 
 </manifest>
