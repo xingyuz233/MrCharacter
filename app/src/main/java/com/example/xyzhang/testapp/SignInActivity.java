@@ -86,12 +86,14 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
             return;
         }
         HashMap<String, String> params = new HashMap<String, String>();
-        params.put(User.PHONENUMBER, mPhoneNumberEditText.getText().toString());
+        final String user = mPhoneNumberEditText.getText().toString();
+        params.put(User.PHONENUMBER, user);
         params.put(User.PASSWORD, mPassWordEditText.getText().toString());
         try {
             HttpUtil.sendPost(originAddress, params,new HttpCallbackListener() {
                 @Override
                 public void onFinish(String response) {
+                    SessionID.getInstance().setUser(user);
                     Message message = new Message();
                     message.obj = response;
                     mHandler.sendMessage(message);

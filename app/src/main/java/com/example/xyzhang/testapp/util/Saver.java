@@ -13,17 +13,18 @@ import java.io.FileOutputStream;
 
 public class Saver {
 
-    public static void save(Context context, Bitmap bitmap) {
+    public static void save(Context context, Bitmap bitmap, String fontName, String picName) {
         try {
             String path = context.getFilesDir().getAbsolutePath();
 //            String path = Environment.getExternalStorageDirectory().getAbsolutePath();
             System.out.println(path);
-            File file = new File(path + "/tempfonts");
+            File file = new File(path + "/" + SessionID.getInstance().getUser() +
+                    "/" + fontName);
             if (!file.exists()) {
                 System.out.println(file.mkdirs());
             }
 
-            File file2 = new File(file.getAbsolutePath() + "/my-font.png");
+            File file2 = new File(file.getAbsolutePath() + "/" + picName + ".png");
             System.out.println(file2.getAbsolutePath());
             if (!file2.exists()) {
                 file2.createNewFile();
@@ -43,8 +44,6 @@ public class Saver {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        upload(context);
     }
 
     private static void upload(Context context) {
