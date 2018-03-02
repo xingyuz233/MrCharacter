@@ -50,7 +50,7 @@ public class Saver {
     private static void upload(Context context) {
 
         new UploadFileAsync(context.getFilesDir().getAbsolutePath() +
-                "/tempfonts/my-font.png").execute("");
+                "/tempfonts/my-font.png", "Any-Font", "my-font.png").execute("");
 
 
     }

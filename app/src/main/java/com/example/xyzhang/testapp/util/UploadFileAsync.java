@@ -14,9 +14,12 @@ import java.net.URL;
 
 public class UploadFileAsync extends AsyncTask<String, Void, String> {
     private String sourceFileUri;
+    private String fontName, picName;
 
-    public UploadFileAsync(String sourceFileUri) {
+    public UploadFileAsync(String sourceFileUri, String fontName, String picName) {
         this.sourceFileUri = sourceFileUri;
+        this.fontName = fontName;
+        this.picName = picName;
     }
 
     @Override
@@ -24,8 +27,8 @@ public class UploadFileAsync extends AsyncTask<String, Void, String> {
 
         try {
 
-            HttpURLConnection conn = null;
-            DataOutputStream dos = null;
+            HttpURLConnection conn;
+            DataOutputStream dos;
             String lineEnd = "\r\n";
             String twoHyphens = "--";
             String boundary = "*****";
@@ -59,6 +62,14 @@ public class UploadFileAsync extends AsyncTask<String, Void, String> {
                     conn.setRequestProperty("bill", sourceFileUri);
 
                     dos = new DataOutputStream(conn.getOutputStream());
+
+                    dos.writeBytes(twoHyphens + boundary + lineEnd);
+                    dos.writeBytes("Content-Disposition: form-data; name=\"font_name\"" + lineEnd + lineEnd);
+                    dos.writeBytes(fontName + lineEnd);
+
+                    dos.writeBytes(twoHyphens + boundary + lineEnd);
+                    dos.writeBytes("Content-Disposition: form-data; name=\"pic_name\"" + lineEnd + lineEnd);
+                    dos.writeBytes(picName + lineEnd);
 
                     dos.writeBytes(twoHyphens + boundary + lineEnd);
                     dos.writeBytes("Content-Disposition: form-data; name=\"bill\";filename=\""
