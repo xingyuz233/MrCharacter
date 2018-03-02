@@ -10,6 +10,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.example.xyzhang.testapp.util.HttpUtil;
+import com.example.xyzhang.testapp.util.SessionID;
 
 import java.util.HashMap;
 
@@ -18,7 +19,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
     private EditText mPassWordEditText;
     private TextView mSignInBtn;
     private TextView mJoinNowBtn;
-    private String originAddress = "http://111.230.231.55:8080/testapp/login.php";
+    private String originAddress = "http://10.0.2.2:8080/login.php";
     Handler mHandler = new Handler(){
         @Override
         public void handleMessage(Message msg) {
