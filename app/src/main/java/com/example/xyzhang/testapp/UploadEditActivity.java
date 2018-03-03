@@ -29,6 +29,8 @@ public class UploadEditActivity extends AppCompatActivity implements View.OnClic
     TextView mClearBtn;
     TextView mLeftBtn;
     TextView mRightBtn;
+    TextView mBackBtn;
+
     boolean editable;
     boolean edited;
     private String originAddress = "http://111.230.231.55:8080/get_pic.php";
@@ -39,10 +41,11 @@ public class UploadEditActivity extends AppCompatActivity implements View.OnClic
 
         mDrawingViewFrameLayout = (FrameLayout) findViewById(R.id.drawingView);
         mCharacter = (TextView) findViewById(R.id.character);
+
         mClearBtn = (TextView) findViewById(R.id.clearBtn);
         mLeftBtn = (TextView) findViewById(R.id.leftBtn);
         mRightBtn = (TextView) findViewById(R.id.rightBtn);
-
+        mBackBtn = (TextView) findViewById(R.id.backBtn);
 
         display();
     }
@@ -51,7 +54,7 @@ public class UploadEditActivity extends AppCompatActivity implements View.OnClic
         mClearBtn.setOnClickListener(this);
         mLeftBtn.setOnClickListener(this);
         mRightBtn.setOnClickListener(this);
-        mDrawingViewFrameLayout.setOnClickListener(this);
+        mBackBtn.setOnClickListener(this);
     }
 
     private void display() {
@@ -142,6 +145,12 @@ public class UploadEditActivity extends AppCompatActivity implements View.OnClic
                     id++;
                 }
                 display();
+                break;
+            case R.id.backBtn:
+                if (editable && edited) {
+                    Saver.save(UploadEditActivity.this, mDrawingView.toBitMap(), fontName, "" + id);
+                }
+                finish();
                 break;
 
         }
