@@ -6,82 +6,76 @@
     tools:context="com.example.xyzhang.testapp.UploadFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <ScrollView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:padding="10dp"
+            android:text="我的字体"
+            android:textSize="20dp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#999999" />
 
         <LinearLayout
+            android:id="@+id/tab_menu"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-
-            <LinearLayout
-                android:id="@+id/tab_menu"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:padding="5dp">
-
-                <TextView
-                    android:id="@+id/txt_editing"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="编辑中"
-                    android:textColor="@drawable/tab_menu_text" />
-
-                <TextView
-                    android:id="@+id/txt_making"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="制作中"
-                    android:textColor="@drawable/tab_menu_text" />
-
-                <TextView
-                    android:id="@+id/txt_finished"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="已完成"
-                    android:textColor="@drawable/tab_menu_text" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/mainLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-            </LinearLayout>
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="5dp">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:padding="10dp"
-                android:text="我的字体"
-                android:textSize="20dp" />
+                android:id="@+id/txt_editing"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="编辑中"
+                android:textColor="@drawable/tab_menu_text" />
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="#999999" />
+            <TextView
+                android:id="@+id/txt_making"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="制作中"
+                android:textColor="@drawable/tab_menu_text" />
 
-            <ImageButton
-                android:id="@+id/addButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"
-                android:layout_gravity="bottom|center"
-                android:background="#ffffff"
-                android:src="@drawable/ic_add_circle_outline_pink_60dp" />
+            <TextView
+                android:id="@+id/txt_finished"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="已完成"
+                android:textColor="@drawable/tab_menu_text" />
+
         </LinearLayout>
-    </ScrollView>
+        <LinearLayout
+            android:id="@+id/mainLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+        </LinearLayout>
+        <ImageButton
+            android:id="@+id/addButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_add_circle_outline_pink_60dp"
+            android:background="#ffffff"
+            android:layout_gravity="bottom|center"
+            android:layout_marginBottom="5dp"
+            />
+    </LinearLayout>
 
 
 </FrameLayout>

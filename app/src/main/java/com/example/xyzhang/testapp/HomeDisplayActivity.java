@@ -36,12 +36,13 @@ public class HomeDisplayActivity extends AppCompatActivity {
         final DrawingView drawingView = new DrawingView(HomeDisplayActivity.this);
 
         mDrawingViewFrameLayout.addView(drawingView);
-
+/*
         mSaveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
 <<<<<<< HEAD
-                /*
+
 <<<<<<< HEAD
                 //Saver.save(HomeDisplayActivity.this, drawingView.toBitMap());
 =======
@@ -58,7 +59,7 @@ public class HomeDisplayActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
 >>>>>>> b617783f48d7862ec880661aa3e299b3f211f728
-*/
+
 =======
                 Display display = HomeDisplayActivity.this.getWindowManager().getDefaultDisplay();
                 Point size = new Point();
@@ -96,6 +97,7 @@ public class HomeDisplayActivity extends AppCompatActivity {
 >>>>>>> 8c12818592521e27af77cec13f1e8ce607a7a907
             }
         });
+        */
 
     }
 }
