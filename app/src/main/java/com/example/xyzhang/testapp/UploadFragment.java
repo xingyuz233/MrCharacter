@@ -7,6 +7,9 @@ import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.os.Handler;
+import android.os.Message;
+import android.text.Layout;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -15,12 +18,24 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.GridLayout;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.example.xyzhang.testapp.util.HttpUtil;
+import com.example.xyzhang.testapp.util.SessionID;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
+import net.sf.json.JSONArray;
 
 
 /**
@@ -42,6 +57,25 @@ public class UploadFragment extends Fragment implements View.OnClickListener {
 
     //view
     private ImageButton mAddButton;
+    private EditText edit;
+    private LinearLayout mMainLayout;
+
+    private String addFontOriginAddress = "http://111.230.231.55:8080/testapp/add_font.php";
+    private String getFontOriginAddress = "http://111.230.231.55:8080/testapp/get_font.php";
+    Handler mHandler = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            if ("OK".equals(msg.obj.toString())){
+
+            }else if ("Wrong".equals(msg.obj.toString())){
+                //todo
+            }else {
+                //todo
+            }
+        }
+    };
+
 
     private OnFragmentInteractionListener mListener;
 
@@ -137,17 +171,39 @@ public class UploadFragment extends Fragment implements View.OnClickListener {
                 //输入框
 
                 AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
-                EditText edit = new EditText(dialog.getContext());
+                edit = new EditText(dialog.getContext());
 
                 dialog.setTitle("请输入字体名称");
                 dialog.setView(edit);
 
                 dialog.setCancelable(false);
                 dialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
+                        HashMap<String, String> params = new HashMap<String, String>();
+                        params.put("name", edit.getText().toString());
+                        try {
+                            HttpUtil.sendPost(addFontOriginAddress, params,new HttpCallbackListener() {
+                                @Override
+                                public void onFinish(String response) {
+                                    Message message = new Message();
+                                    message.obj = response;
 
+                                }
+
+                                @Override
+                                public void onError(Exception e) {
+                                    Message message = new Message();
+                                    message.obj = e.toString();
+                                    mHandler.sendMessage(message);
+                                }
+                            });
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                     }
+
                 });
                 dialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                     @Override
@@ -212,8 +268,69 @@ public class UploadFragment extends Fragment implements View.OnClickListener {
         }
     }
 
-    public void initView(View rootView){
+    public void display(View rootView, String response) {
+        /*
+        Gson gson = new Gson();
+        Object res = gson.fromJson(json, beanClass)
+
+
+        JSONArray jsonArray = new JSONArray("[{‘day1’:’work’,’day2’:26},{‘day1’:123,’day2’:26}]");
+        System.out.print(jsonArray.toString());
+        */
+        Gson gson = new Gson();
+        List<Font> fontList = gson.fromJson(response, new TypeToken<List<Font>>(){}.getType());
+
+        final int WEIGHT = 3;
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        LinearLayout rowLayout = null;
+        for (int i = 0; i < fontList.size(); i++) {
+            /*
+            GridLayout.Spec rowSpec = GridLayout.spec(i/3); // 设置它的行和列
+            GridLayout.Spec columnSpec = GridLayout.spec(i%3);
+
+            GridLayout.LayoutParams params = null;;
+// 设置btn的宽和高
+            params.= 100;
+            params.height = 60;
+            TextView textView = new TextView(mGridLayout.getContext());
+            textView.setText(fontList.get(i).getName());
+           // mGridLayout.addView(textView);
+            mGridLayout.addView(textView, params);
+            */
+            if (i % WEIGHT == 0) {
+                rowLayout = new LinearLayout(rootView.getContext());
+                rowLayout.setOrientation(LinearLayout.HORIZONTAL);
+                mMainLayout.addView(rowLayout);
+            }
+            View textView = new View(rootView.getContext());
+            rowLayout.addView(textView);
+
+        }
+
+
+    }
+    public void initView(final View rootView){
         mAddButton = (ImageButton) rootView.findViewById(R.id.addButton);
+        mMainLayout = (LinearLayout) rootView.findViewById(R.id.mainLayout);
+        try {
+            HttpUtil.sendGet(getFontOriginAddress, null,new HttpCallbackListener() {
+                @Override
+                public void onFinish(String response) {
+                   // SessionID.getInstance().setUser(user);
+
+                    display(rootView, response);
+                }
+
+                @Override
+                public void onError(Exception e) {
+                    Message message = new Message();
+                    message.obj = e.toString();
+                    mHandler.sendMessage(message);
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
     public void initEvent() {
         mAddButton.setOnClickListener(this);

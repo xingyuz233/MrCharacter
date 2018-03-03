@@ -28,7 +28,7 @@ public class HomeDisplayActivity extends AppCompatActivity {
         mSaveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Saver.save(HomeDisplayActivity.this, drawingView.toBitMap());
+                //Saver.save(HomeDisplayActivity.this, drawingView.toBitMap());
             }
         });
 

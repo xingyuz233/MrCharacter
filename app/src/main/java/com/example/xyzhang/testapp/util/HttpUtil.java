@@ -108,16 +108,21 @@ public class HttpUtil {
 
                     //类型
                     connection.setRequestProperty("Content-Type", "application/json");
+
                     if (SessionID.getInstance().getId() != null)
                         connection.setRequestProperty("Cookie", SessionID.getInstance().getId());
+
                     //设置Body值
                     PrintWriter out = new PrintWriter(connection.getOutputStream());
                     String postContent = (new JSONObject(params)).toString();
                     out.write(postContent);
                     out.flush();
                     // Set cookie
+
                     Map<String, List<String>> headers = connection.getHeaderFields();
                     System.out.println(headers);
+
+
                     if (headers.get("Set-Cookie") != null) {
                         String cookie = headers.get("Set-Cookie").get(0);
                         SessionID.getInstance().setId(cookie);

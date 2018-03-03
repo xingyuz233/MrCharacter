@@ -12,8 +12,6 @@ public class User implements Serializable{
     private String phoneNumber;
     private String password;
     private String userName;
-    private String emailAddress;
-    private Date registerTime;
     public static String PHONENUMBER = "phonenumber";
     public static String PASSWORD = "password";
     public static String USERNAME = "username";
@@ -22,7 +20,6 @@ public class User implements Serializable{
         this.phoneNumber = phoneNumber;
         this.password = password;
         this.userName = userName;
-        registerTime = new Date();
     }
 
     public int getId() {
@@ -49,17 +46,6 @@ public class User implements Serializable{
     public void setUserName(String userName) {
         this.userName = userName;
     }
-    public String getEmailAddress() {
-        return emailAddress;
-    }
-    public void setEmailAddress(String emailAddress) {
-        this.emailAddress = emailAddress;
-    }
-    public Date getRegisterTime() {
-        return registerTime;
-    }
-    public void setRegisterTime(Date registerTime) {
-        this.registerTime = registerTime;
-    }
+
 
 }
