@@ -35,6 +35,7 @@
         <activity android:name=".InfoActivity" />
         <activity android:name=".HomeDisplayActivity" >
 <<<<<<< HEAD
+<<<<<<< HEAD
 
         </activity>
         <activity android:name=".UploadEditActivity">
@@ -44,6 +45,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+=======
+        </activity>
+        <activity android:name=".UploadEditActivity" />
+>>>>>>> 8c12818592521e27af77cec13f1e8ce607a7a907
 =======
         </activity>
         <activity android:name=".UploadEditActivity" />
