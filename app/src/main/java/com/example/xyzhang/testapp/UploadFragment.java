@@ -3,6 +3,8 @@ package com.example.xyzhang.testapp;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -20,6 +22,7 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.GridLayout;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.Spinner;
@@ -283,7 +286,9 @@ public class UploadFragment extends Fragment implements View.OnClickListener {
         final int WEIGHT = 3;
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         LinearLayout rowLayout = null;
-        for (int i = 0; i < fontList.size(); i++) {
+
+        final LayoutInflater inflater = (LayoutInflater) getActivity().getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        for (final Font font: fontList) {
             /*
             GridLayout.Spec rowSpec = GridLayout.spec(i/3); // 设置它的行和列
             GridLayout.Spec columnSpec = GridLayout.spec(i%3);
@@ -297,14 +302,39 @@ public class UploadFragment extends Fragment implements View.OnClickListener {
            // mGridLayout.addView(textView);
             mGridLayout.addView(textView, params);
             */
-            if (i % WEIGHT == 0) {
-                rowLayout = new LinearLayout(rootView.getContext());
-                rowLayout.setOrientation(LinearLayout.HORIZONTAL);
-                mMainLayout.addView(rowLayout);
-            }
-            View textView = new View(rootView.getContext());
-            rowLayout.addView(textView);
+//            if (i % WEIGHT == 0) {
+//                rowLayout = new LinearLayout(rootView.getContext());
+//                rowLayout.setOrientation(LinearLayout.HORIZONTAL);
+//                mMainLayout.addView(rowLayout);
+//            }
+//            View textView = new View(rootView.getContext());
+//            rowLayout.addView(textView);
 
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    View view = inflater.inflate(R.layout.font_entry, mMainLayout, false);
+                    TextView txtTitle = view.findViewById(R.id.txtTitle);
+                    txtTitle.setText(font.getName());
+
+                    // todo display picture in imgFont
+                    ImageView imgFont = view.findViewById(R.id.imgFont);
+                    //imgFont.setBackgroundColor(Color.BLUE);
+                    // imgFont....
+
+                    view.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Intent intent = new Intent(getActivity(), UploadEditActivity.class);
+                            intent.putExtra("FONT_ID", font.getId())
+                                    .putExtra("FONT_NAME", font.getName());
+                            startActivity(intent);
+                        }
+                    });
+
+                    mMainLayout.addView(view);
+                }
+            });
         }
 
 

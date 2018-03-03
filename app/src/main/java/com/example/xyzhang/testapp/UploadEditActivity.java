@@ -2,6 +2,7 @@ package com.example.xyzhang.testapp;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -18,8 +19,8 @@ import java.lang.*;
 
 public class UploadEditActivity extends AppCompatActivity implements View.OnClickListener{
 
-    String fontName = "zxy";
-    String user = "1110"; //SessionID.getInstance().getUser();
+    String fontName;
+    String user = SessionID.getInstance().getUser();
     int id;
     FrameLayout mDrawingViewFrameLayout;
     DrawingView mDrawingView;
@@ -27,14 +28,20 @@ public class UploadEditActivity extends AppCompatActivity implements View.OnClic
     TextView mClearBtn;
     TextView mLeftBtn;
     TextView mRightBtn;
+    boolean editable;
     private String originAddress = "http://111.230.231.55:8080/get_pic.php";
 
     private void initView() {
+        Intent intent = getIntent();
+        fontName = getIntent().getStringExtra("FONT_NAME");
+
         mDrawingViewFrameLayout = (FrameLayout) findViewById(R.id.drawingView);
         mCharacter = (TextView) findViewById(R.id.character);
         mClearBtn = (TextView) findViewById(R.id.clearBtn);
         mLeftBtn = (TextView) findViewById(R.id.leftBtn);
         mRightBtn = (TextView) findViewById(R.id.rightBtn);
+
+
         display();
     }
 
@@ -56,6 +63,7 @@ public class UploadEditActivity extends AppCompatActivity implements View.OnClic
             imageView.setImageURI(Uri.fromFile(file));
             mDrawingViewFrameLayout.removeAllViews();
             mDrawingViewFrameLayout.addView(imageView);
+            editable = false;
         }
     }
 
@@ -86,6 +94,7 @@ public class UploadEditActivity extends AppCompatActivity implements View.OnClic
         mDrawingViewFrameLayout.removeAllViews();
         mDrawingView = new DrawingView(UploadEditActivity.this);
         mDrawingViewFrameLayout.addView(mDrawingView);
+        editable = true;
     }
 
     @Override
@@ -103,16 +112,18 @@ public class UploadEditActivity extends AppCompatActivity implements View.OnClic
                 clear();
                 break;
             case R.id.leftBtn:
-
-                Saver.save(UploadEditActivity.this, mDrawingView.toBitMap(), fontName, ""+id);
+                if (editable) {
+                    Saver.save(UploadEditActivity.this, mDrawingView.toBitMap(), fontName, "" + id);
+                }
                 if (id > 0) {
                     id--;
                 }
                 display();
                 break;
             case R.id.rightBtn:
-
-                Saver.save(UploadEditActivity.this, mDrawingView.toBitMap(), fontName, ""+id);
+                if (editable) {
+                    Saver.save(UploadEditActivity.this, mDrawingView.toBitMap(), fontName, "" + id);
+                }
                 if (id < Character.MAX - 1) {
                     id++;
                 }
