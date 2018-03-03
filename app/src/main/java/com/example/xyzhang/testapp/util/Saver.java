@@ -2,6 +2,7 @@ package com.example.xyzhang.testapp.util;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.os.Environment;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -31,6 +32,32 @@ public class Saver {
             }
 
             FileOutputStream out = new FileOutputStream(file2);
+
+            try {
+                if (bitmap.compress(Bitmap.CompressFormat.PNG, 50, out)) {
+                    out.flush();
+                    out.close();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void savePng(Context context, Bitmap bitmap, String fileName) {
+
+        System.out.println("----------------------saving png " + fileName);
+        try {
+            String path = Environment.getExternalStorageDirectory().getAbsolutePath();
+            File file = new File(path + "/tempfonts/" +fileName);
+            if (!file.exists()) {
+                System.out.println(file.createNewFile());
+            }
+
+            FileOutputStream out = new FileOutputStream(file);
 
             try {
                 if (bitmap.compress(Bitmap.CompressFormat.PNG, 50, out)) {
