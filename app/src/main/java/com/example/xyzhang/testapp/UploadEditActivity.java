@@ -1,17 +1,25 @@
 package com.example.xyzhang.testapp;
 
+import android.app.Activity;
+import android.content.Context;
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.xyzhang.testapp.util.Saver;
+import com.example.xyzhang.testapp.util.SessionID;
 
+import java.io.File;
 import java.lang.*;
 
 public class UploadEditActivity extends AppCompatActivity implements View.OnClickListener{
 
+    String fontName = "zxy";
+    String user = "1110"; //SessionID.getInstance().getUser();
     int id;
     FrameLayout mDrawingViewFrameLayout;
     DrawingView mDrawingView;
@@ -40,10 +48,37 @@ public class UploadEditActivity extends AppCompatActivity implements View.OnClic
         //展示标准字体
         mCharacter.setText(String.valueOf(Character.CHARACTERS.charAt(id)));
         //展示编辑
-        if (true) {
+       File file = getPicFile();
+        if (file == null) {
             clear();
         } else {
+            ImageView imageView = new ImageView(UploadEditActivity.this);
+            imageView.setImageURI(Uri.fromFile(file));
+            mDrawingViewFrameLayout.removeAllViews();
+            mDrawingViewFrameLayout.addView(imageView);
+        }
+    }
 
+    private File getPicFile() {
+
+        //展示编辑
+        Context context = UploadEditActivity.this;
+        String path = context.getFilesDir().getAbsolutePath();
+//            String path = Environment.getExternalStorageDirectory().getAbsolutePath();
+        System.out.println(path);
+        File file = new File(path + "/" + user +
+                "/" + fontName);
+        if (!file.exists()) {
+            System.out.println(file.mkdirs());
+        }
+
+        String src = file.getAbsolutePath() + "/" + id + ".png";
+        File file2 = new File(src);
+        System.out.println(file2.getAbsolutePath());
+        if (!file2.exists()) {
+            return null;
+        } else {
+            return file2;
         }
     }
 
@@ -69,7 +104,7 @@ public class UploadEditActivity extends AppCompatActivity implements View.OnClic
                 break;
             case R.id.leftBtn:
 
-                Saver.save(UploadEditActivity.this, mDrawingView.toBitMap(), "zxy", ""+id);
+                Saver.save(UploadEditActivity.this, mDrawingView.toBitMap(), fontName, ""+id);
                 if (id > 0) {
                     id--;
                 }
@@ -77,16 +112,12 @@ public class UploadEditActivity extends AppCompatActivity implements View.OnClic
                 break;
             case R.id.rightBtn:
 
-                Saver.save(UploadEditActivity.this, mDrawingView.toBitMap(), "zxy", ""+id);
+                Saver.save(UploadEditActivity.this, mDrawingView.toBitMap(), fontName, ""+id);
                 if (id < Character.MAX - 1) {
                     id++;
                 }
                 display();
                 break;
-
-
         }
     }
-
-
 }
