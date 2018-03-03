@@ -44,10 +44,14 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="10dp">
 
-            <ImageView
+            <TextView
+                android:id="@+id/character"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
-                android:src="@drawable/empty"/>
+                android:textSize="50dp"
+                android:gravity="center"
+
+                android:background="@drawable/empty"/>
             <ProgressBar
                 android:id="@+id/progressBar2"
                 android:layout_width="200dp"
@@ -68,12 +72,13 @@
             android:layout_gravity="center_horizontal">
 
             <TextView
+                android:id="@+id/leftBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:drawableLeft="@drawable/ic_chevron_left_darkgrey_24dp"/>
 
             <TextView
-                android:id="@+id/main_btn_login"
+                android:id="@+id/clearBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="30dp"
@@ -82,6 +87,7 @@
                 android:text="重写"
                 android:textColor="#666666" />
             <TextView
+                android:id="@+id/rightBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:drawableRight="@drawable/ic_chevron_right_darkgrey_24dp"/>

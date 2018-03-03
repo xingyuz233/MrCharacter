@@ -19,6 +19,15 @@
                 android:layout_height="wrap_content"
                 android:drawableLeft="@drawable/ic_chevron_left_white_40dp" />
         </LinearLayout>
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:max="100"
+            android:progress="50" />
+
         <FrameLayout
             android:id="@+id/drawingView"
             android:layout_width="300dp"

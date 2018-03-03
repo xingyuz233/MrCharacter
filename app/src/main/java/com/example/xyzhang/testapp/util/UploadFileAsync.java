@@ -40,7 +40,7 @@ public class UploadFileAsync extends AsyncTask<String, Void, String> {
             if (sourceFile.isFile()) {
 
                 try {
-                    String upLoadServerUri = "http://10.0.2.2:8080/get_file.php?";
+                    String upLoadServerUri = "http://111.230.231.55:8080/get_file.php?";
 
                     // open a URL connection to the Servlet
                     FileInputStream fileInputStream = new FileInputStream(

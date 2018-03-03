@@ -21,13 +21,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".MainActivity">
-        </activity>
-        <activity android:name=".SignInActivity" />
-        <activity android:name=".JoinNowActivity" />
-        <activity android:name=".SendCodeActivity" />
-        <activity android:name=".verify_code" />
-        <activity android:name=".InfoActivity" />
-        <activity android:name=".HomeDisplayActivity" >
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -35,7 +28,26 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".UploadEditActivity"></activity>
+        <activity android:name=".SignInActivity" />
+        <activity android:name=".JoinNowActivity" />
+        <activity android:name=".SendCodeActivity" />
+        <activity android:name=".verify_code" />
+        <activity android:name=".InfoActivity" />
+        <activity android:name=".HomeDisplayActivity" >
+<<<<<<< HEAD
+
+        </activity>
+        <activity android:name=".UploadEditActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+=======
+        </activity>
+        <activity android:name=".UploadEditActivity" />
+>>>>>>> 8c12818592521e27af77cec13f1e8ce607a7a907
     </application>
 
 </manifest>
