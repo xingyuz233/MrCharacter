@@ -41,7 +41,6 @@ public class HomeDisplayActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 <<<<<<< HEAD
-<<<<<<< HEAD
                 /*
 <<<<<<< HEAD
                 //Saver.save(HomeDisplayActivity.this, drawingView.toBitMap());
@@ -61,8 +60,6 @@ public class HomeDisplayActivity extends AppCompatActivity {
 >>>>>>> b617783f48d7862ec880661aa3e299b3f211f728
 */
 =======
-=======
->>>>>>> 8c12818592521e27af77cec13f1e8ce607a7a907
                 Display display = HomeDisplayActivity.this.getWindowManager().getDefaultDisplay();
                 Point size = new Point();
                 display.getSize(size);
@@ -96,9 +93,6 @@ public class HomeDisplayActivity extends AppCompatActivity {
 //                    TextWrapper.draw(width, height, Environment.getExternalStorageDirectory().getAbsolutePath() + "/tempfonts/hand.ttf", HomeDisplayActivity.this);
 
                 System.out.println("----------------------------complete");
-<<<<<<< HEAD
->>>>>>> 8c12818592521e27af77cec13f1e8ce607a7a907
-=======
 >>>>>>> 8c12818592521e27af77cec13f1e8ce607a7a907
             }
         });
