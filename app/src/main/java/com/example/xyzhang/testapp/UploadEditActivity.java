@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -29,6 +30,7 @@ public class UploadEditActivity extends AppCompatActivity implements View.OnClic
     TextView mLeftBtn;
     TextView mRightBtn;
     boolean editable;
+    boolean edited;
     private String originAddress = "http://111.230.231.55:8080/get_pic.php";
 
     private void initView() {
@@ -49,6 +51,7 @@ public class UploadEditActivity extends AppCompatActivity implements View.OnClic
         mClearBtn.setOnClickListener(this);
         mLeftBtn.setOnClickListener(this);
         mRightBtn.setOnClickListener(this);
+        mDrawingViewFrameLayout.setOnClickListener(this);
     }
 
     private void display() {
@@ -64,6 +67,7 @@ public class UploadEditActivity extends AppCompatActivity implements View.OnClic
             mDrawingViewFrameLayout.removeAllViews();
             mDrawingViewFrameLayout.addView(imageView);
             editable = false;
+            edited = false;
         }
     }
 
@@ -93,8 +97,18 @@ public class UploadEditActivity extends AppCompatActivity implements View.OnClic
     private void clear() {
         mDrawingViewFrameLayout.removeAllViews();
         mDrawingView = new DrawingView(UploadEditActivity.this);
+        mDrawingView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+
+                edited = true;
+                return false;
+            }
+        });
+
         mDrawingViewFrameLayout.addView(mDrawingView);
         editable = true;
+        edited = false;
     }
 
     @Override
@@ -112,7 +126,7 @@ public class UploadEditActivity extends AppCompatActivity implements View.OnClic
                 clear();
                 break;
             case R.id.leftBtn:
-                if (editable) {
+                if (editable && edited) {
                     Saver.save(UploadEditActivity.this, mDrawingView.toBitMap(), fontName, "" + id);
                 }
                 if (id > 0) {
@@ -121,7 +135,7 @@ public class UploadEditActivity extends AppCompatActivity implements View.OnClic
                 display();
                 break;
             case R.id.rightBtn:
-                if (editable) {
+                if (editable && edited) {
                     Saver.save(UploadEditActivity.this, mDrawingView.toBitMap(), fontName, "" + id);
                 }
                 if (id < Character.MAX - 1) {
@@ -129,6 +143,9 @@ public class UploadEditActivity extends AppCompatActivity implements View.OnClic
                 }
                 display();
                 break;
+
         }
+
     }
+
 }
