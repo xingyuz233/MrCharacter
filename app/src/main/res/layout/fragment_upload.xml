@@ -59,37 +59,13 @@
                 android:textColor="@drawable/tab_menu_text" />
 
         </LinearLayout>
-        <GridLayout
+        <LinearLayout
+            android:id="@+id/mainLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:columnCount="3">
-            <TextView
-                android:layout_width="100dp"
-                android:layout_height="50dp"
-                android:layout_columnWeight="1"/>
-            <TextView
-                android:layout_width="100dp"
-                android:layout_height="50dp"
-                android:layout_columnWeight="1"/>
-            <TextView
-                android:layout_width="100dp"
-                android:layout_height="50dp"
-                android:layout_columnWeight="1"/>
-            <TextView
-                android:layout_width="100dp"
-                android:height="50dp"
-                android:layout_columnWeight="1"/>
-            <TextView
-                android:layout_width="100dp"
-                android:height="50dp"
-                android:layout_columnWeight="1"/>
-            <TextView
-                android:layout_width="100dp"
-                android:height="50dp"
-                android:layout_columnWeight="1"/>
+            android:orientation="vertical">
 
-        </GridLayout>
+        </LinearLayout>
         <ImageButton
             android:id="@+id/addButton"
             android:layout_width="wrap_content"

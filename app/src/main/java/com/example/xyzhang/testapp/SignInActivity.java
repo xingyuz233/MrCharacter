@@ -19,7 +19,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
     private EditText mPassWordEditText;
     private TextView mSignInBtn;
     private TextView mJoinNowBtn;
-    private String originAddress = "http://10.0.2.2:8080/login.php";
+    private String originAddress = "http://111.230.231.55:8080/testapp/login.php";
     Handler mHandler = new Handler(){
         @Override
         public void handleMessage(Message msg) {
