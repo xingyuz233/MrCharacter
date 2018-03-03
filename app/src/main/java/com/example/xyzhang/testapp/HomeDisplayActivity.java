@@ -1,13 +1,22 @@
 package com.example.xyzhang.testapp;
 
+import android.app.Activity;
+import android.graphics.Bitmap;
+import android.graphics.Point;
+import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Display;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.example.xyzhang.testapp.util.Saver;
+import com.example.xyzhang.testapp.util.TextWrapper;
+
+import java.io.IOException;
+import java.util.ArrayList;
 
 public class HomeDisplayActivity extends AppCompatActivity {
     FrameLayout mDrawingViewFrameLayout;
@@ -28,7 +37,22 @@ public class HomeDisplayActivity extends AppCompatActivity {
         mSaveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+<<<<<<< HEAD
                 //Saver.save(HomeDisplayActivity.this, drawingView.toBitMap());
+=======
+                try {
+                    Display display = HomeDisplayActivity.this.getWindowManager().getDefaultDisplay();
+                    Point size = new Point();
+                    display.getSize(size);
+                    int width = size.x, height = size.y;
+
+                    TextWrapper.draw(width, height, Environment.getExternalStorageDirectory().getAbsolutePath() + "/tempfonts/hand.ttf", HomeDisplayActivity.this);
+
+                    System.out.println("----------------------------complete");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+>>>>>>> b617783f48d7862ec880661aa3e299b3f211f728
             }
         });
 
