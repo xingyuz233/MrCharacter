@@ -29,7 +29,7 @@
             android:text="Let's confirm your phone number"
             android:textColor="#666666"
             android:textSize="32sp" />
-        />
+
 
         <TextView
             android:layout_width="wrap_content"

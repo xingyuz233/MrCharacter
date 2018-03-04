@@ -1,17 +1,24 @@
 package com.example.xyzhang.testapp;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewManager;
+import android.widget.EditText;
 import android.widget.TextView;
 
+import com.example.xyzhang.testapp.util.HttpUtil;
 import com.example.xyzhang.testapp.util.SessionID;
+
+import java.util.HashMap;
 
 
 /**
@@ -38,6 +45,7 @@ public class UserFragment extends Fragment implements View.OnClickListener {
 
 
     private TextView mLogoutBtn;
+    private String logoutAddress;
 
 
 
@@ -141,11 +149,54 @@ public class UserFragment extends Fragment implements View.OnClickListener {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.logoutBtn:
-                SessionID.getInstance().setId(null);
-                SessionID.getInstance().setUser(null);
-                Intent intent = new Intent(getActivity(),  SignInActivity.class);
-                startActivity(intent);
-                getActivity().finish();
+                AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
+                dialog.setTitle("确定要退出吗？");
+                dialog.setCancelable(false);
+                dialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        /*
+                        HashMap<String, String> params = new HashMap<String, String>();
+                        params.put("name", edit.getText().toString());
+                        try {
+                            HttpUtil.sendPost(addFontOriginAddress, params,new HttpCallbackListener() {
+                                @Override
+                                public void onFinish(String response) {
+                                    Message message = new Message();
+                                    message.obj = response;
+
+                                }
+
+                                @Override
+                                public void onError(Exception e) {
+                                    Message message = new Message();
+                                    message.obj = e.toString();
+                                    mHandler.sendMessage(message);
+                                }
+                            });
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        */
+                        SessionID.getInstance().setId(null);
+                        SessionID.getInstance().setUser(null);
+                        Intent intent = new Intent(getActivity(),  SignInActivity.class);
+                        startActivity(intent);
+                        getActivity().finish();
+
+                    }
+
+                });
+                dialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                    }
+                });
+                dialog.show();
+                break;
+
 
         }
 

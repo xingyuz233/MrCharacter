@@ -34,6 +34,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -58,10 +59,31 @@ public class UploadFragment extends Fragment implements View.OnClickListener {
     private String mParam1;
     private String mParam2;
 
+
+
+
+    private OnFragmentInteractionListener mListener;
+
+    public UploadFragment() {
+        // Required empty public constructor
+    }
+
+
+
     //view
+    private View rootView;
+
     private ImageButton mAddButton;
     private EditText edit;
     private LinearLayout mMainLayout;
+    private TextView mEditingTab;
+    private TextView mProccessingTab;
+    private TextView mFinishedTab;
+    private View mEditingLine;
+    private View mProccessingLine;
+    private View mFinishedLine;
+
+
 
     private String addFontOriginAddress = "http://111.230.231.55:8080/testapp/add_font.php";
     private String getFontOriginAddress = "http://111.230.231.55:8080/testapp/get_font.php";
@@ -79,12 +101,6 @@ public class UploadFragment extends Fragment implements View.OnClickListener {
         }
     };
 
-
-    private OnFragmentInteractionListener mListener;
-
-    public UploadFragment() {
-        // Required empty public constructor
-    }
 
     /**
      * Use this factory method to create a new instance of
@@ -119,8 +135,8 @@ public class UploadFragment extends Fragment implements View.OnClickListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View rootView =  inflater.inflate(R.layout.fragment_upload, container, false);
-        initView(rootView);
+        rootView =  inflater.inflate(R.layout.fragment_upload, container, false);
+        initView();
         initEvent();
         return rootView;
     }
@@ -167,9 +183,37 @@ public class UploadFragment extends Fragment implements View.OnClickListener {
         void onFragmentInteraction(Uri uri);
     }
 
+    //重置所有文本的选中状态
+    public void selected(){
+        mEditingTab.setSelected(false);
+        mProccessingTab.setSelected(false);
+        mFinishedTab.setSelected(false);
+        mEditingLine.setSelected(false);
+        mProccessingLine.setSelected(false);
+        mFinishedLine.setSelected(false);
+    }
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.editingTab:
+                selected();
+                mEditingTab.setSelected(true);
+                mEditingLine.setSelected(true);
+                //displayEditFont(FontList.editingFontList);
+                break;
+            case R.id.processingTab:
+                selected();
+                mProccessingTab.setSelected(true);
+                mProccessingLine.setSelected(true);
+               // displayServerFont(FontList.proccessingFontList);
+                break;
+            case R.id.finishedTab:
+                selected();
+                mFinishedTab.setSelected(true);
+                mFinishedLine.setSelected(true);
+               // displayServerFont(FontList.finishedFontList);
+                break;
             case R.id.addButton:
                 //输入框
 
@@ -184,6 +228,34 @@ public class UploadFragment extends Fragment implements View.OnClickListener {
 
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
+                        if (!FontList.addFont(getActivity(), edit.getText().toString())) {
+
+                            AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
+                            dialog.setTitle("该字体已经存在！");
+
+                            dialog.setCancelable(false);
+                            dialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+
+                                }
+                            });
+                            dialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+
+                                }
+                            });
+                            dialog.show();
+
+                        } else {
+                            FontList.editingFontList.add(edit.getText().toString());
+                            displayEditFont(FontList.editingFontList);
+                        }
+                        /***
+                         * 以下代码用于按钮提交
+                         */
+                        /*
                         HashMap<String, String> params = new HashMap<String, String>();
                         params.put("name", edit.getText().toString());
                         try {
@@ -205,6 +277,7 @@ public class UploadFragment extends Fragment implements View.OnClickListener {
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
+                        */
                     }
 
                 });
@@ -268,48 +341,56 @@ public class UploadFragment extends Fragment implements View.OnClickListener {
 
                 break;
                 */
+
         }
     }
 
-    public void display(View rootView, String response) {
-        /*
-        Gson gson = new Gson();
-        Object res = gson.fromJson(json, beanClass)
 
 
-        JSONArray jsonArray = new JSONArray("[{‘day1’:’work’,’day2’:26},{‘day1’:123,’day2’:26}]");
-        System.out.print(jsonArray.toString());
-        */
-        Gson gson = new Gson();
-        List<Font> fontList = gson.fromJson(response, new TypeToken<List<Font>>(){}.getType());
+    //编辑中字体的展示
+    public void displayEditFont(List<String> fontList) {
 
-        final int WEIGHT = 3;
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        LinearLayout rowLayout = null;
+        mMainLayout.removeAllViews();
+
+        final LayoutInflater inflater = (LayoutInflater) getActivity().getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        for (final String font: fontList) {
+
+
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    View view = inflater.inflate(R.layout.font_entry, mMainLayout, false);
+                    TextView txtTitle = view.findViewById(R.id.txtTitle);
+                    txtTitle.setText(font);
+
+                    // todo display picture in imgFont
+                    ImageView imgFont = view.findViewById(R.id.imgFont);
+                    //imgFont.setBackgroundColor(Color.BLUE);
+                    // imgFont....
+
+                    view.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Intent intent = new Intent(getActivity(), UploadEditActivity.class);
+                            //intent.putExtra("FONT_ID", font.getId())
+                            intent.putExtra("FONT_NAME", font);
+                            startActivity(intent);
+                        }
+                    });
+
+                    mMainLayout.addView(view);
+                }
+            });
+        }
+
+
+    }
+    //服务器字体的展示
+    public void displayServerFont(List<Font> fontList) {
+        mMainLayout.removeAllViews();
 
         final LayoutInflater inflater = (LayoutInflater) getActivity().getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         for (final Font font: fontList) {
-            /*
-            GridLayout.Spec rowSpec = GridLayout.spec(i/3); // 设置它的行和列
-            GridLayout.Spec columnSpec = GridLayout.spec(i%3);
-
-            GridLayout.LayoutParams params = null;;
-// 设置btn的宽和高
-            params.= 100;
-            params.height = 60;
-            TextView textView = new TextView(mGridLayout.getContext());
-            textView.setText(fontList.get(i).getName());
-           // mGridLayout.addView(textView);
-            mGridLayout.addView(textView, params);
-            */
-//            if (i % WEIGHT == 0) {
-//                rowLayout = new LinearLayout(rootView.getContext());
-//                rowLayout.setOrientation(LinearLayout.HORIZONTAL);
-//                mMainLayout.addView(rowLayout);
-//            }
-//            View textView = new View(rootView.getContext());
-//            rowLayout.addView(textView);
-
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -322,65 +403,32 @@ public class UploadFragment extends Fragment implements View.OnClickListener {
                     //imgFont.setBackgroundColor(Color.BLUE);
                     // imgFont....
 
-                    view.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            Intent intent = new Intent(getActivity(), UploadEditActivity.class);
-                            intent.putExtra("FONT_ID", font.getId())
-                                    .putExtra("FONT_NAME", font.getName());
-                            startActivity(intent);
-                        }
-                    });
 
                     mMainLayout.addView(view);
                 }
             });
         }
-
-
     }
-    public void initView(final View rootView){
+
+    public void initView(){
         mAddButton = (ImageButton) rootView.findViewById(R.id.addButton);
         mMainLayout = (LinearLayout) rootView.findViewById(R.id.mainLayout);
-        try {
-            HttpUtil.sendGet(getFontOriginAddress, null,new HttpCallbackListener() {
-                @Override
-                public void onFinish(String response) {
-                   // SessionID.getInstance().setUser(user);
+        mEditingTab = (TextView) rootView.findViewById(R.id.editingTab);
+        mProccessingTab = (TextView) rootView.findViewById(R.id.processingTab);
+        mFinishedTab = (TextView) rootView.findViewById(R.id.finishedTab);
+        mEditingLine = (View)rootView.findViewById(R.id.editingLine);
+        mProccessingLine = (View) rootView.findViewById(R.id.processingLine);
+        mFinishedLine = (View) rootView.findViewById(R.id.finishedLine);
 
-                    display(rootView, response);
-                }
+        FontList.initEditingFontList(getActivity());
+        FontList.initServerFontList(getFontOriginAddress);
 
-                @Override
-                public void onError(Exception e) {
-                    Message message = new Message();
-                    message.obj = e.toString();
-                    mHandler.sendMessage(message);
-                }
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
     public void initEvent() {
         mAddButton.setOnClickListener(this);
-    }
-    //设置屏幕背景透明度
-    private void BackgroudAlpha(float alpha) {
-        // TODO Auto-generated method stub
-        WindowManager.LayoutParams l = getActivity().getWindow().getAttributes();
-        l.alpha = alpha;
-        getActivity().getWindow().setAttributes(l);
-    }
-    //点击其他部分popwindow消失时，屏幕恢复透明度
-    class popupwindowdismisslistener implements PopupWindow.OnDismissListener{
-
-        @Override
-        public void onDismiss() {
-            // TODO Auto-generated method stub
-            BackgroudAlpha((float)1);
-        }
-
+        mEditingTab.setOnClickListener(this);
+        mProccessingTab.setOnClickListener(this);
+        mFinishedTab.setOnClickListener(this);
     }
 
 }
