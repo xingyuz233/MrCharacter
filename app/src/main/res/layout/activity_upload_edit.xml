@@ -58,11 +58,11 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="10dp"
+                android:layout_marginLeft="20dp"
                 android:orientation="vertical" >
 
                 <SeekBar
-                    android:id="@+id/progress"
+                    android:id="@+id/seekBar"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -70,21 +70,21 @@
                     android:minHeight="2dp"
                     android:paddingBottom="3dp"
                     android:paddingLeft="12dp"
-                    android:max="200"
+                    android:max="199"
                     android:paddingRight="12dp"
-                    android:paddingTop="3dp"
+                    android:paddingTop="10dp"
                     android:progressDrawable="@drawable/layer_progress"
                     android:thumb="@drawable/shape_circle" />
 
                 <TextView
-                    android:id="@+id/text1"
+                    android:id="@+id/seekBarValue"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:layout_gravity="center"
                     android:padding="6dp"
-                    android:text="Value:0"
-                    android:textColor="#16BC5C"
+                    android:text="页数:1"
+                    android:textColor="#aaaaaa"
                     android:textSize="16dp" />
             </LinearLayout>
         </LinearLayout>
