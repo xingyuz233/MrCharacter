@@ -1,6 +1,7 @@
 package com.example.xyzhang.testapp;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
@@ -142,6 +143,8 @@ public class UserFragment extends Fragment implements View.OnClickListener {
             case R.id.logoutBtn:
                 SessionID.getInstance().setId(null);
                 SessionID.getInstance().setUser(null);
+                Intent intent = new Intent(getActivity(),  SignInActivity.class);
+                startActivity(intent);
                 getActivity().finish();
 
         }
