@@ -200,7 +200,7 @@ public class UploadFragment extends Fragment implements View.OnClickListener {
                 selected();
                 mEditingTab.setSelected(true);
                 mEditingLine.setSelected(true);
-                //displayEditFont(FontList.editingFontList);
+                displayEditFont(FontList.editingFontList);
                 break;
             case R.id.processingTab:
                 selected();
