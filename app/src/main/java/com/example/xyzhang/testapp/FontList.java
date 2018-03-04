@@ -75,7 +75,7 @@ public class FontList {
     //服务器字体
     public static void initServerFontList(String address) {
         try {
-            HttpUtil.sendGet(getFontOriginAddress, null,new HttpCallbackListener() {
+            HttpUtil.sendGet(address, null,new HttpCallbackListener() {
                 @Override
                 public void onFinish(String response) {
                     // SessionID.getInstance().setUser(user);
