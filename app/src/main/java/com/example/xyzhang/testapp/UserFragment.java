@@ -7,6 +7,10 @@ import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewManager;
+import android.widget.TextView;
+
+import com.example.xyzhang.testapp.util.SessionID;
 
 
 /**
@@ -17,11 +21,13 @@ import android.view.ViewGroup;
  * Use the {@link UserFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class UserFragment extends Fragment {
+public class UserFragment extends Fragment implements View.OnClickListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+
+    private String originAddress = "";
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -29,9 +35,18 @@ public class UserFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
+
+    private TextView mLogoutBtn;
+
+
+
     public UserFragment() {
         // Required empty public constructor
     }
+
+
+
+
 
     /**
      * Use this factory method to create a new instance of
@@ -64,7 +79,11 @@ public class UserFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_user, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_user, container, false);
+        initView(rootView);
+        initEvent(rootView);
+
+        return rootView;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -107,5 +126,25 @@ public class UserFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+    private void initView(View rootView) {
+        mLogoutBtn = rootView.findViewById(R.id.logoutBtn);
+    }
+
+    private void initEvent(View rootView) {
+        mLogoutBtn.setOnClickListener((View.OnClickListener) this);
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.logoutBtn:
+                SessionID.getInstance().setId(null);
+                SessionID.getInstance().setUser(null);
+                getActivity().finish();
+
+        }
+
     }
 }

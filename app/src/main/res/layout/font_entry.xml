@@ -10,29 +10,35 @@
         android:id="@+id/imgFont"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        app:srcCompat="@drawable/empty" />
+        android:layout_weight="1"
+        android:src="@drawable/empty" />
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="200dp"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:gravity="center">
+        android:layout_weight="2"
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/txtTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="TextView"
-            android:textSize="40sp" />
+            android:layout_gravity="center"
+            android:text="TextVIew"
+            android:textSize="30sp" />
 
         <TextView
             android:id="@+id/txtDesc"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:layout_gravity="center"
             android:text="TextView" />
 
+
     </LinearLayout>
+
+
 
 </android.widget.LinearLayout>
