@@ -15,7 +15,7 @@ import android.os.AsyncTask;
 import java.io.IOException;
 
 
-public class TextWrapper extends AsyncTask<Context, Double, String> {
+public class TextWrapper extends AsyncTask<Context, Double, Integer> {
     //    private static char[] END_CHARS = {'s'};
     private static final String END_CHARS = "，。》、？；：’”】｝、！％）" + ",.>?;:]}!%)";
     private UpdateTask updateTask;
@@ -26,7 +26,7 @@ public class TextWrapper extends AsyncTask<Context, Double, String> {
 
     public interface UpdateTask {
         void onProgressUpdate(double progress);
-        void onFinish();
+        void onFinish(int x);
     }
 
     public TextWrapper(UpdateTask updateTask, int screenWidth, int screenHeight, String fontPath, String text) {
@@ -37,7 +37,7 @@ public class TextWrapper extends AsyncTask<Context, Double, String> {
         this.text = text;
     }
 
-    private void draw(int screenWidth, int screenHeight, String fontPath, String text, Context context) throws IOException {
+    private int draw(int screenWidth, int screenHeight, String fontPath, String text, Context context) throws IOException {
 //        screenWidth = 650;
 //        screenHeight = 1155;
 
@@ -72,7 +72,7 @@ public class TextWrapper extends AsyncTask<Context, Double, String> {
         Paint paint = new Paint();
         paint.setTypeface(typeface);
         paint.setTextSize(lineWidth / 20);
-        paint.setColor(Color.WHITE);
+        paint.setColor(Color.BLACK);
 
         Paint.FontMetrics metrics = paint.getFontMetrics();
 
@@ -137,6 +137,7 @@ public class TextWrapper extends AsyncTask<Context, Double, String> {
         Saver.savePng(context, bitmap, (lineIndex / linesEveryPage + 1) + ".png");
         bitmap.recycle();
 
+        return (lineIndex / linesEveryPage + 1);
     }
 
     @Override
@@ -146,18 +147,18 @@ public class TextWrapper extends AsyncTask<Context, Double, String> {
     }
 
     @Override
-    protected String doInBackground(Context... contexts) {
+    protected Integer doInBackground(Context... contexts) {
         try {
-            draw(screenWidth, screenHeight, fontPath, text, contexts[0]);
+            return draw(screenWidth, screenHeight, fontPath, text, contexts[0]);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return null;
+        return -1;
     }
 
     @Override
-    protected void onPostExecute(String s) {
+    protected void onPostExecute(Integer s) {
         super.onPostExecute(s);
-        updateTask.onFinish();
+        updateTask.onFinish(s);
     }
 }
