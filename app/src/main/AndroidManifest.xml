@@ -20,16 +20,17 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".MainActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+
         </activity>
         <activity android:name=".SignInActivity" />
         <activity android:name=".JoinNowActivity" />
         <activity android:name=".SendCodeActivity" />
         <activity android:name=".verify_code" />
         <activity android:name=".InfoActivity" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity android:name=".HomeDisplayActivity">
 

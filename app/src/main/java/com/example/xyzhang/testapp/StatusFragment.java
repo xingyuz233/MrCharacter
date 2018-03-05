@@ -10,7 +10,6 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -128,7 +127,7 @@ public class StatusFragment extends Fragment {
     private int getLayoutRes() {
 //        switch (status) {
 //            case IN_EDIT:
-//                return R.layout.font_entry;
+//                return R.layout.font_entry_editing;
 //            case IN_PROCESSING:
 //                return 0; //todo
 //            case FINISHED:
@@ -136,7 +135,7 @@ public class StatusFragment extends Fragment {
 //            default:
 //                return 0;
 //        }
-        return R.layout.font_entry;
+        return R.layout.font_entry_editing;
     }
 
     private void inflateItem(View view, final String font) {
