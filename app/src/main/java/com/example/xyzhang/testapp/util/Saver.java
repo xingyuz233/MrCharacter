@@ -52,7 +52,10 @@ public class Saver {
         System.out.println("----------------------saving png " + fileName);
         try {
             String path = Environment.getExternalStorageDirectory().getAbsolutePath();
-            File file = new File(path + "/tempfonts/" +fileName);
+            File dir = new File(path + "/tempfonts");
+            if (!dir.exists())
+                System.out.println(dir.mkdirs());
+            File file = new File(path + "/tempfonts/" + fileName);
             if (!file.exists()) {
                 System.out.println(file.createNewFile());
             }
@@ -73,10 +76,20 @@ public class Saver {
         }
     }
 
-    private static void upload(Context context) {
+    public static void upload(Context context) {
 
-        new UploadFileAsync(context.getFilesDir().getAbsolutePath() +
-                "/tempfonts/my-font.png", "Any-Font", "my-font.png").execute("");
+        new UploadFileAsync(Environment.getExternalStorageDirectory().getAbsolutePath() +
+                "/tempfonts", "Any-Font") {
+            @Override
+            protected void onPostExecute(String result) {
+                System.out.println(result);
+            }
+
+            @Override
+            protected void onProgressUpdate(Double... values) {
+                System.out.println("progress " + values[0]);
+            }
+        }.execute("1.png", "2.png", "3.png");
 
 
     }

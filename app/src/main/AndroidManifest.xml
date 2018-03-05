@@ -19,28 +19,20 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-<<<<<<< HEAD
-        <activity android:name=".MainActivity">
-=======
         <activity android:name=".MainActivity" >
 
->>>>>>> ef71c785a92d0fadf5b5c4ab928e54724aea8c11
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity android:name=".SignInActivity" />
         <activity android:name=".JoinNowActivity" />
         <activity android:name=".SendCodeActivity" />
         <activity android:name=".verify_code" />
         <activity android:name=".InfoActivity" >
-<<<<<<< HEAD
-
-=======
->>>>>>> ef71c785a92d0fadf5b5c4ab928e54724aea8c11
         </activity>
         <activity android:name=".HomeDisplayActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
 
         </activity>
         <activity android:name=".UploadEditActivity" />

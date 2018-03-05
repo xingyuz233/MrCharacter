@@ -2,24 +2,27 @@ package com.example.xyzhang.testapp.util;
 
 import android.os.AsyncTask;
 
+import org.json.JSONArray;
+
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.MessageFormat;
+import java.util.Arrays;
 
 /**
  * Created by flower on 18-3-1.
  */
 
-public class UploadFileAsync extends AsyncTask<String, Void, String> {
+public abstract class UploadFileAsync extends AsyncTask<String, Double, String> {
     private String sourceFileUri;
-    private String fontName, picName;
+    private String fontName;
 
-    public UploadFileAsync(String sourceFileUri, String fontName, String picName) {
+    public UploadFileAsync(String sourceFileUri, String fontName) {
         this.sourceFileUri = sourceFileUri;
         this.fontName = fontName;
-        this.picName = picName;
     }
 
     @Override
@@ -35,45 +38,48 @@ public class UploadFileAsync extends AsyncTask<String, Void, String> {
             int bytesRead, bytesAvailable, bufferSize;
             byte[] buffer;
             int maxBufferSize = 1024 * 1024;
-            File sourceFile = new File(sourceFileUri);
 
-            if (sourceFile.isFile()) {
 
-                try {
-                    String upLoadServerUri = "http://111.230.231.55:8080/get_file.php?";
+            try {
+                String upLoadServerUri = "http://10.0.2.2:8080/get_file.php?";
 
-                    // open a URL connection to the Servlet
+                // open a URL connection to the Servlet
+                URL url = new URL(upLoadServerUri);
+
+                // Open a HTTP connection to the URL
+                conn = (HttpURLConnection) url.openConnection();
+                conn.setDoInput(true); // Allow Inputs
+                conn.setDoOutput(true); // Allow Outputs
+                conn.setUseCaches(false); // Don't use a Cached Copy
+                conn.setRequestMethod("POST");
+                conn.setRequestProperty("Connection", "Keep-Alive");
+                conn.setRequestProperty("ENCTYPE",
+                        "multipart/form-data");
+                conn.setRequestProperty("Content-Type",
+                        "multipart/form-data;boundary=" + boundary);
+                conn.setRequestProperty("Cookie", SessionID.getInstance().getId());
+
+                dos = new DataOutputStream(conn.getOutputStream());
+
+                dos.writeBytes(twoHyphens + boundary + lineEnd);
+                dos.writeBytes("Content-Disposition: form-data; name=\"font_name\"" + lineEnd + lineEnd);
+                dos.writeBytes(fontName + lineEnd);
+
+                dos.writeBytes(twoHyphens + boundary + lineEnd);
+                dos.writeBytes("Content-Disposition: form-data; name=\"pic_name\"" + lineEnd + lineEnd);
+
+                JSONArray array = new JSONArray(Arrays.asList(params));
+                dos.writeBytes(array.toString() + lineEnd);
+//                    dos.writeBytes(picName + lineEnd);
+
+                for (int i = 0; i < params.length; i++) {
+                    File sourceFile = new File(sourceFileUri + "/" + params[i]);
                     FileInputStream fileInputStream = new FileInputStream(
                             sourceFile);
-                    URL url = new URL(upLoadServerUri);
-
-                    // Open a HTTP connection to the URL
-                    conn = (HttpURLConnection) url.openConnection();
-                    conn.setDoInput(true); // Allow Inputs
-                    conn.setDoOutput(true); // Allow Outputs
-                    conn.setUseCaches(false); // Don't use a Cached Copy
-                    conn.setRequestMethod("POST");
-                    conn.setRequestProperty("Connection", "Keep-Alive");
-                    conn.setRequestProperty("ENCTYPE",
-                            "multipart/form-data");
-                    conn.setRequestProperty("Content-Type",
-                            "multipart/form-data;boundary=" + boundary);
-                    conn.setRequestProperty("Cookie", SessionID.getInstance().getId());
-                    conn.setRequestProperty("bill", sourceFileUri);
-
-                    dos = new DataOutputStream(conn.getOutputStream());
-
                     dos.writeBytes(twoHyphens + boundary + lineEnd);
-                    dos.writeBytes("Content-Disposition: form-data; name=\"font_name\"" + lineEnd + lineEnd);
-                    dos.writeBytes(fontName + lineEnd);
-
-                    dos.writeBytes(twoHyphens + boundary + lineEnd);
-                    dos.writeBytes("Content-Disposition: form-data; name=\"pic_name\"" + lineEnd + lineEnd);
-                    dos.writeBytes(picName + lineEnd);
-
-                    dos.writeBytes(twoHyphens + boundary + lineEnd);
-                    dos.writeBytes("Content-Disposition: form-data; name=\"bill\";filename=\""
-                            + sourceFileUri + "\"" + lineEnd);
+                    dos.writeBytes(
+                            MessageFormat.format("Content-Disposition: form-data; name=\"upload{0}\";filename=\"{1}\"{2}",
+                                    i, sourceFileUri, lineEnd));
 
                     dos.writeBytes(lineEnd);
 
@@ -96,42 +102,42 @@ public class UploadFileAsync extends AsyncTask<String, Void, String> {
                                 bufferSize);
 
                     }
+                    fileInputStream.close();
 
                     // send multipart form data necesssary after file
                     // data...
                     dos.writeBytes(lineEnd);
-                    dos.writeBytes(twoHyphens + boundary + twoHyphens
-                            + lineEnd);
+                    publishProgress((double) i / params.length);
+                }
+                dos.writeBytes(twoHyphens + boundary + twoHyphens
+                        + lineEnd);
 
-                    // Responses from the server (code and message)
-                    int serverResponseCode = conn.getResponseCode();
-                    String serverResponseMessage = conn
-                            .getResponseMessage();
+                // Responses from the server (code and message)
+                int serverResponseCode = conn.getResponseCode();
+                String serverResponseMessage = conn
+                        .getResponseMessage();
 
-                    if (serverResponseCode == 200) {
+                if (serverResponseCode == 200) {
 
-                        // messageText.setText(msg);
-                        //Toast.makeText(ctx, "File Upload Complete.",
-                        //      Toast.LENGTH_SHORT).show();
+                    // messageText.setText(msg);
+                    //Toast.makeText(ctx, "File Upload Complete.",
+                    //      Toast.LENGTH_SHORT).show();
 
-                        // recursiveDelete(mDirectory1);
-
-                    }
-
-                    // close the streams //
-                    fileInputStream.close();
-                    dos.flush();
-                    dos.close();
-
-                } catch (Exception e) {
-
-                    // dialog.dismiss();
-                    e.printStackTrace();
+                    // recursiveDelete(mDirectory1);
 
                 }
-                // dialog.dismiss();
 
-            } // End else block
+                // close the streams //
+                dos.flush();
+                dos.close();
+
+            } catch (Exception e) {
+
+                // dialog.dismiss();
+                e.printStackTrace();
+
+            }
+            // dialog.dismiss();
 
 
         } catch (Exception ex) {
@@ -143,15 +149,12 @@ public class UploadFileAsync extends AsyncTask<String, Void, String> {
     }
 
     @Override
-    protected void onPostExecute(String result) {
-
-    }
+    protected abstract void onPostExecute(String result);
 
     @Override
     protected void onPreExecute() {
     }
 
     @Override
-    protected void onProgressUpdate(Void... values) {
-    }
+    protected abstract void onProgressUpdate(Double... values);
 }
