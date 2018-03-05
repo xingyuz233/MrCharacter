@@ -19,7 +19,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity" >
+        <activity android:name=".MainActivity">
 
         </activity>
         <activity android:name=".SignInActivity" />
@@ -27,15 +27,17 @@
         <activity android:name=".SendCodeActivity" />
         <activity android:name=".verify_code" />
         <activity android:name=".InfoActivity" >
-        </activity>
-        <activity android:name=".HomeDisplayActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
 
         </activity>
-        <activity android:name=".UploadEditActivity" />
+        <activity android:name=".HomeDisplayActivity">
+
+        </activity>
+        <activity android:name=".UploadEditActivity">
+        <intent-filter>
+            <action android:name="android.intent.action.MAIN" />
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent-filter>
+        </activity>
         <activity android:name=".TextPagerActivity">
 
         </activity>

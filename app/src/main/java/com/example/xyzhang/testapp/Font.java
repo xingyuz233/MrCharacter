@@ -16,7 +16,7 @@ import java.util.Map;
 public class Font implements Serializable {
     private int id;
     private String name;
-    private int userid;
+    private String userphone;
     private boolean finished;
 
 
@@ -24,8 +24,8 @@ public class Font implements Serializable {
         return id;
     }
 
-    public int getUserid() {
-        return userid;
+    public String getUserphone() {
+        return userphone;
     }
 
     public String getName() {
@@ -44,8 +44,8 @@ public class Font implements Serializable {
         this.name = name;
     }
 
-    public void setUserid(int userid) {
-        this.userid = userid;
+    public void setUserphone(String userphone) {
+        this.userphone = userphone;
     }
 
     public void setFinished(boolean finished) {

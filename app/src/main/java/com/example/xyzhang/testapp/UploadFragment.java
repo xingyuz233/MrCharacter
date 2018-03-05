@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.app.Fragment;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.view.ViewPager;
 import android.text.Layout;
 import android.util.Log;
 import android.view.Gravity;
@@ -75,7 +76,7 @@ public class UploadFragment extends Fragment implements View.OnClickListener {
 
     private ImageButton mAddButton;
     private EditText edit;
-    private LinearLayout mMainLayout;
+    private ViewPager mMainLayout;
     private TextView mEditingTab;
     private TextView mProccessingTab;
     private TextView mFinishedTab;
@@ -206,13 +207,13 @@ public class UploadFragment extends Fragment implements View.OnClickListener {
                 selected();
                 mProccessingTab.setSelected(true);
                 mProccessingLine.setSelected(true);
-               // displayServerFont(FontList.proccessingFontList);
+                displayServerFont(FontList.proccessingFontList);
                 break;
             case R.id.finishedTab:
                 selected();
                 mFinishedTab.setSelected(true);
                 mFinishedLine.setSelected(true);
-               // displayServerFont(FontList.finishedFontList);
+                displayServerFont(FontList.finishedFontList);
                 break;
             case R.id.addButton:
                 //输入框
@@ -412,7 +413,7 @@ public class UploadFragment extends Fragment implements View.OnClickListener {
 
     public void initView(){
         mAddButton = (ImageButton) rootView.findViewById(R.id.addButton);
-        mMainLayout = (LinearLayout) rootView.findViewById(R.id.mainLayout);
+        mMainLayout = (ViewPager) rootView.findViewById(R.id.status_pager);
         mEditingTab = (TextView) rootView.findViewById(R.id.editingTab);
         mProccessingTab = (TextView) rootView.findViewById(R.id.processingTab);
         mFinishedTab = (TextView) rootView.findViewById(R.id.finishedTab);

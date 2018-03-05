@@ -10,6 +10,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.example.xyzhang.testapp.util.Saver;
@@ -30,6 +31,8 @@ public class UploadEditActivity extends AppCompatActivity implements View.OnClic
     TextView mLeftBtn;
     TextView mRightBtn;
     TextView mBackBtn;
+    SeekBar mSeekBar;
+    TextView mSeekBarValue;
 
     boolean editable;
     boolean edited;
@@ -47,6 +50,8 @@ public class UploadEditActivity extends AppCompatActivity implements View.OnClic
         mRightBtn = (TextView) findViewById(R.id.rightBtn);
         mBackBtn = (TextView) findViewById(R.id.backBtn);
 
+        mSeekBar = (SeekBar) findViewById(R.id.seekBar);
+        mSeekBarValue = (TextView) findViewById(R.id.seekBarValue);
         display();
     }
 
@@ -55,6 +60,24 @@ public class UploadEditActivity extends AppCompatActivity implements View.OnClic
         mLeftBtn.setOnClickListener(this);
         mRightBtn.setOnClickListener(this);
         mBackBtn.setOnClickListener(this);
+
+        mSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                id = i;
+                mSeekBarValue.setText("页数: "+(i+1));
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                display();
+            }
+        });
     }
 
     private void display() {
