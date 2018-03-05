@@ -18,6 +18,8 @@ public class Font implements Serializable {
     private String name;
     private String userphone;
     private boolean finished;
+    private double progress;
+
 
 
     public int getId() {
@@ -36,6 +38,10 @@ public class Font implements Serializable {
         return finished;
     }
 
+    public double getProgress() {
+        return progress;
+    }
+
     public void setId(int id) {
         this.id = id;
     }
@@ -52,4 +58,7 @@ public class Font implements Serializable {
         this.finished = finished;
     }
 
+    public void setProgress(double progress) {
+        this.progress = progress;
+    }
 }

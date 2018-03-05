@@ -37,6 +37,28 @@
 
 
     </LinearLayout>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:layout_gravity="center"
+        android:orientation="vertical">
+        <ProgressBar
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:max="100"
+            android:progress="30"
+            android:secondaryProgress="80"
+            android:indeterminate="false" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_gravity="center"
+            android:text="50%"/>
+    </LinearLayout>
 
 
 

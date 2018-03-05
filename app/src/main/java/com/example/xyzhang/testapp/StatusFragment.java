@@ -132,17 +132,17 @@ public class StatusFragment extends Fragment {
 
     @LayoutRes
     private int getLayoutRes() {
-//        switch (status) {
-//            case IN_EDIT:
-//                return R.layout.font_entry_editing;
-//            case IN_PROCESSING:
-//                return 0; //todo
-//            case FINISHED:
-//                return 0; //todo
-//            default:
-//                return 0;
-//        }
-        return R.layout.font_entry_editing;
+        switch (status) {
+            case IN_EDIT:
+                return R.layout.font_entry_editing;
+            case IN_PROCESSING:
+                return R.layout.font_entry_processing; //todo
+            case FINISHED:
+                return R.layout.font_entry_finished; //todo
+            default:
+                return 0;
+        }
+//        return R.layout.font_entry_editing;
     }
 
     private void inflateItem(View view, final int index) {
