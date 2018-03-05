@@ -156,29 +156,7 @@ public class UserFragment extends Fragment implements View.OnClickListener {
 
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        /*
-                        HashMap<String, String> params = new HashMap<String, String>();
-                        params.put("name", edit.getText().toString());
-                        try {
-                            HttpUtil.sendPost(addFontOriginAddress, params,new HttpCallbackListener() {
-                                @Override
-                                public void onFinish(String response) {
-                                    Message message = new Message();
-                                    message.obj = response;
 
-                                }
-
-                                @Override
-                                public void onError(Exception e) {
-                                    Message message = new Message();
-                                    message.obj = e.toString();
-                                    mHandler.sendMessage(message);
-                                }
-                            });
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                        */
                         SessionID.getInstance().setId(null);
                         SessionID.getInstance().setUser(null);
                         Intent intent = new Intent(getActivity(),  SignInActivity.class);

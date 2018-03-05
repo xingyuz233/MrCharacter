@@ -29,7 +29,7 @@ public class HomeDisplayActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_display);
 
-        mDrawingViewFrameLayout = (FrameLayout) findViewById(R.id.drawingView);
+        mDrawingViewFrameLayout = findViewById(R.id.drawingView);
         mSaveBtn = (Button) findViewById(R.id.saveBtn);
         mProgressBar = findViewById(R.id.progressBar);
 
@@ -40,8 +40,7 @@ public class HomeDisplayActivity extends AppCompatActivity {
         mSaveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                System.out.println("----------------------------complete");
-
+                Saver.upload(HomeDisplayActivity.this);
             }
         });
 

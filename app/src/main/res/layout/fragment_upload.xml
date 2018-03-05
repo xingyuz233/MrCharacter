@@ -106,14 +106,6 @@
 
 
         </android.support.v4.view.ViewPager>
-        <ImageButton
-            android:id="@+id/addButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_add_circle_outline_pink_60dp"
-            android:background="#ffffff"
-            android:layout_gravity="bottom|center"
-            android:layout_marginBottom="5dp" />
     </LinearLayout>
 
 

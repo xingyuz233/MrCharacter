@@ -1,7 +1,6 @@
 package com.example.xyzhang.testapp;
 
 import android.content.Context;
-import android.os.Message;
 
 import com.example.xyzhang.testapp.util.HttpUtil;
 import com.example.xyzhang.testapp.util.SessionID;
@@ -10,9 +9,7 @@ import com.google.gson.reflect.TypeToken;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by xingyu on 2018/3/4.
@@ -20,11 +17,10 @@ import java.util.Map;
 
 public class FontList {
 
-    static String getFontOriginAddress = "";
-    static String user = SessionID.getInstance().getUser();
+    private static String user = SessionID.getInstance().getUser();
     static List<String> editingFontList;
-    static List<Font> proccessingFontList;
-    static List<Font> finishedFontList;
+    private static List<Font> proccessingFontList;
+    private static List<Font> finishedFontList;
     //本地字体
     private static List<String> getEditingFontList(Context context) {
         List<String> newFontList = new ArrayList<>();
@@ -48,7 +44,7 @@ public class FontList {
 
 
 
-    private static List<Font> getProccessingFontList(List<Font> fontList) {
+    private static List<Font> getProcessingFontList(List<Font> fontList) {
         List<Font> newFontList = new ArrayList<>();
         for (Font font: fontList) {
             if (!font.isFinished()) {
@@ -82,7 +78,7 @@ public class FontList {
                     Gson gson = new Gson();
                     List<Font> fontList = gson.fromJson(response, new TypeToken<List<Font>>(){}.getType());
 
-                    proccessingFontList = FontList.getProccessingFontList(fontList);
+                    proccessingFontList = FontList.getProcessingFontList(fontList);
                     finishedFontList = FontList.getFinishedFontList(fontList);
                     //display(rootView, response);
                 }
@@ -103,14 +99,14 @@ public class FontList {
     }
 
     public static boolean addFont(Context context, String fontName) {
-        List<String> newFontList = new ArrayList<>();
-//        Context context = getActivity();
+        //        Context context = getActivity();
         String path = context.getFilesDir().getAbsolutePath();
 //            String path = Environment.getExternalStorageDirectory().getAbsolutePath();
         System.out.println(path);
         File file = new File(path + "/" + user + "/" + fontName);
         if (!file.exists()) {
             System.out.println(file.mkdirs());
+            editingFontList.add(fontName);
             return true;
         }
         else {
@@ -118,5 +114,20 @@ public class FontList {
         }
     }
 
+    public static List<String> getProcessingFontList() {
+        List<String> list = new ArrayList<>();
+        for (Font font: proccessingFontList) {
+            list.add(font.getName());
+        }
+        return list;
+    }
+
+    public static List<String> getFinishedFontList() {
+        List<String> list = new ArrayList<>();
+        for (Font font: finishedFontList) {
+            list.add(font.getName());
+        }
+        return list;
+    }
 }
 
