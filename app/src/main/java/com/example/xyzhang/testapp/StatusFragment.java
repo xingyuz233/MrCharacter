@@ -14,8 +14,10 @@ import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import java.text.MessageFormat;
 import java.util.List;
 
 public class StatusFragment extends Fragment {
@@ -54,22 +56,21 @@ public class StatusFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_status, container, false);
         ListView listView = view.findViewById(R.id.listStatus);
 
-//        switch (status) {
-//            case IN_EDIT:
-//                fontList = FontList.editingFontList;
-//                break;
-//            case IN_PROCESSING:
-////                fontList = FontList.getProcessingFontList();
-//                break;
-//            case FINISHED:
-////                fontList = FontList.getFinishedFontList();
-//        }
+        switch (status) {
+            case IN_EDIT:
+                fontNameList = FontList.editingFontList;
+                break;
+            case IN_PROCESSING:
+                fontList = FontList.getProcessingFontList();
+                break;
+            case FINISHED:
+                fontList = FontList.getFinishedFontList();
+        }
         adapter = new FontListAdapter();
         listView.setAdapter(adapter);
 
         FloatingActionButton addButton = view.findViewById(R.id.addButton);
         if (status == IN_EDIT) {
-            fontNameList = FontList.editingFontList;
             addButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -122,12 +123,15 @@ public class StatusFragment extends Fragment {
             });
         } else {
             ((ViewGroup) view).removeView(addButton);
-            if (status == IN_PROCESSING)
-                fontList = FontList.getProcessingFontList();
-            else
-                fontList = FontList.getFinishedFontList();
         }
         return view;
+    }
+
+    private int getCount() {
+        if (status == IN_EDIT)
+            return fontNameList.size();
+        else
+            return fontList.size();
     }
 
     @LayoutRes
@@ -136,20 +140,20 @@ public class StatusFragment extends Fragment {
             case IN_EDIT:
                 return R.layout.font_entry_editing;
             case IN_PROCESSING:
-                return R.layout.font_entry_processing; //todo
+                return R.layout.font_entry_processing;
             case FINISHED:
-                return R.layout.font_entry_finished; //todo
+                return R.layout.font_entry_finished;
             default:
                 return 0;
         }
-//        return R.layout.font_entry_editing;
     }
 
     private void inflateItem(View view, final int index) {
+        TextView txtTitle;
         switch (status) {
             case IN_EDIT:
                 final String fontName = fontNameList.get(index);
-                TextView txtTitle = view.findViewById(R.id.txtTitle);
+                txtTitle = view.findViewById(R.id.txtTitle);
                 txtTitle.setText(fontName);
 
                 // todo display picture in imgFont
@@ -166,12 +170,22 @@ public class StatusFragment extends Fragment {
                 });
                 break;
             case IN_PROCESSING:
-                // todo
+                Font font = fontList.get(index);
+                txtTitle = view.findViewById(R.id.txtTitleProgressing);
+                txtTitle.setText(font.getName());
+
+                ProgressBar progressBar = view.findViewById(R.id.prgProgressing);
+                progressBar.setProgress((int) (font.getProgress() * 100));
+
+                TextView txtPercentage = view.findViewById(R.id.txtPercentage);
+                txtPercentage.setText(MessageFormat.format("{0}{1}",
+                        font.getProgress() * 100, getString(R.string.percentage_mark)));
                 break;
             case FINISHED:
                 // todo
                 break;
         }
+
     }
 
     private class FontListAdapter extends BaseAdapter {
@@ -180,7 +194,7 @@ public class StatusFragment extends Fragment {
 
         @Override
         public int getCount() {
-            return fontList.size();
+            return StatusFragment.this.getCount();
         }
 
         @Override

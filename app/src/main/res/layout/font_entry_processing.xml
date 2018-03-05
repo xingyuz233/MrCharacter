@@ -21,10 +21,11 @@
         android:orientation="vertical">
 
         <TextView
+            android:id="@+id/txtTitleProgressing"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:layout_gravity="center"
+            android:layout_weight="1"
             android:text="TextVIew"
             android:textSize="30sp" />
 
@@ -43,21 +44,25 @@
         android:layout_weight="1"
         android:layout_gravity="center"
         android:orientation="vertical">
+
         <ProgressBar
+            android:id="@+id/prgProgressing"
+            style="?android:attr/progressBarStyleHorizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            style="?android:attr/progressBarStyleHorizontal"
+            android:indeterminate="false"
             android:max="100"
             android:progress="30"
-            android:secondaryProgress="80"
-            android:indeterminate="false" />
+            android:secondaryProgress="80" />
+
         <TextView
+            android:id="@+id/txtPercentage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:layout_gravity="center"
-            android:text="50%"/>
+            android:layout_weight="1"
+            android:text="50%" />
     </LinearLayout>
 
 
