@@ -114,20 +114,12 @@ public class FontList {
         }
     }
 
-    public static List<String> getProcessingFontList() {
-        List<String> list = new ArrayList<>();
-        for (Font font: proccessingFontList) {
-            list.add(font.getName());
-        }
-        return list;
+    public static List<Font> getProcessingFontList() {
+        return proccessingFontList;
     }
 
-    public static List<String> getFinishedFontList() {
-        List<String> list = new ArrayList<>();
-        for (Font font: finishedFontList) {
-            list.add(font.getName());
-        }
-        return list;
+    public static List<Font> getFinishedFontList() {
+        return finishedFontList;
     }
 }
 

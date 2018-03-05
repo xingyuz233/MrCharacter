@@ -25,7 +25,9 @@ public class StatusFragment extends Fragment {
 
     private int status;
 
-    private List<String> fontList;
+    private List<String> fontNameList;
+    private List<Font> fontList;
+
     private BaseAdapter adapter;
 
     public StatusFragment() {
@@ -62,12 +64,12 @@ public class StatusFragment extends Fragment {
 //            case FINISHED:
 ////                fontList = FontList.getFinishedFontList();
 //        }
-        fontList = FontList.editingFontList;
         adapter = new FontListAdapter();
         listView.setAdapter(adapter);
 
         FloatingActionButton addButton = view.findViewById(R.id.addButton);
         if (status == IN_EDIT) {
+            fontNameList = FontList.editingFontList;
             addButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -118,8 +120,13 @@ public class StatusFragment extends Fragment {
                     dialog.show();
                 }
             });
-        } else
+        } else {
             ((ViewGroup) view).removeView(addButton);
+            if (status == IN_PROCESSING)
+                fontList = FontList.getProcessingFontList();
+            else
+                fontList = FontList.getFinishedFontList();
+        }
         return view;
     }
 
@@ -138,11 +145,12 @@ public class StatusFragment extends Fragment {
         return R.layout.font_entry_editing;
     }
 
-    private void inflateItem(View view, final String font) {
+    private void inflateItem(View view, final int index) {
         switch (status) {
             case IN_EDIT:
+                final String fontName = fontNameList.get(index);
                 TextView txtTitle = view.findViewById(R.id.txtTitle);
-                txtTitle.setText(font);
+                txtTitle.setText(fontName);
 
                 // todo display picture in imgFont
                 ImageView imgFont = view.findViewById(R.id.imgFont);
@@ -152,7 +160,7 @@ public class StatusFragment extends Fragment {
                     public void onClick(View v) {
                         Intent intent = new Intent(getActivity(), UploadEditActivity.class);
                         //intent.putExtra("FONT_ID", font.getId())
-                        intent.putExtra("FONT_NAME", font);
+                        intent.putExtra("FONT_NAME", fontName);
                         startActivity(intent);
                     }
                 });
@@ -189,8 +197,7 @@ public class StatusFragment extends Fragment {
         public View getView(int i, View view, ViewGroup viewGroup) {
             if (view == null)
                 view = inflater.inflate(getLayoutRes(), null);
-            String font = fontList.get(i);
-            inflateItem(view, font);
+            inflateItem(view, i);
             return view;
         }
     }
