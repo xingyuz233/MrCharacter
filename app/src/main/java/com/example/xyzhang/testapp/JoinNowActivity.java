@@ -19,7 +19,7 @@ public class JoinNowActivity extends AppCompatActivity implements View.OnClickLi
     private EditText mUserNameEditText;
     private TextView mSignInBtn;
     private TextView mJoinNowBtn;
-    private String originAddress = "http://111.230.231.55:8080/testapp/register.php";
+    private String originAddress = "http://10.0.2.2:8080/register.php";
     Handler mHandler = new Handler(){
         @Override
         public void handleMessage(Message msg) {

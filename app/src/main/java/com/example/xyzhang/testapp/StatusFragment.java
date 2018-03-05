@@ -18,6 +18,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.text.MessageFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 public class StatusFragment extends Fragment {
@@ -31,6 +32,7 @@ public class StatusFragment extends Fragment {
     private List<Font> fontList;
 
     private BaseAdapter adapter;
+    private static final String GET_FONT_ORIGIN_ADDRESS = "http://10.0.2.2:8080/get_font.php";
 
     public StatusFragment() {
         // Required empty public constructor
@@ -58,14 +60,44 @@ public class StatusFragment extends Fragment {
 
         switch (status) {
             case IN_EDIT:
+                FontList.initEditingFontList(getActivity());
                 fontNameList = FontList.editingFontList;
                 break;
             case IN_PROCESSING:
-                fontList = FontList.getProcessingFontList();
+                if (FontList.initServerFontList(GET_FONT_ORIGIN_ADDRESS, getActivity(), new Runnable() {
+                    @Override
+                    public void run() {
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                fontList = FontList.getProcessingFontList();
+                                adapter.notifyDataSetChanged();
+                            }
+                        });
+                    }
+                }))
+                    fontList = new ArrayList<>();
+                else
+                    fontList = FontList.getProcessingFontList();
                 break;
             case FINISHED:
-                fontList = FontList.getFinishedFontList();
+                if (FontList.initServerFontList(GET_FONT_ORIGIN_ADDRESS, getActivity(), new Runnable() {
+                    @Override
+                    public void run() {
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                fontList = FontList.getFinishedFontList();
+                                adapter.notifyDataSetChanged();
+                            }
+                        });
+                    }
+                }))
+                    fontList = new ArrayList<>();
+                else
+                    fontList = FontList.getFinishedFontList();
         }
+        System.out.println(status + "..." + fontList);
         adapter = new FontListAdapter();
         listView.setAdapter(adapter);
 
@@ -194,6 +226,7 @@ public class StatusFragment extends Fragment {
 
         @Override
         public int getCount() {
+            System.out.println(status + "???" + fontList);
             return StatusFragment.this.getCount();
         }
 

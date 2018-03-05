@@ -49,7 +49,6 @@ public class UploadFragment extends Fragment implements View.OnClickListener {
     private View rootView;
 
 
-    private static final String GET_FONT_ORIGIN_ADDRESS = "http://111.230.231.55:8080/testapp/get_font.php";
 
 
     /**
@@ -163,10 +162,12 @@ public class UploadFragment extends Fragment implements View.OnClickListener {
         txt_tabs[1] = rootView.findViewById(R.id.processingTab);
         txt_tabs[2] = rootView.findViewById(R.id.finishedTab);
 
+
         FragmentManager fragmentManager = ((FragmentActivity) getActivity()).getSupportFragmentManager();
         mStausPager.setAdapter(new FragmentStatePagerAdapter(fragmentManager) {
             @Override
             public android.support.v4.app.Fragment getItem(int status) {
+                System.out.println("new instance?");
                 return StatusFragment.newInstance(status);
             }
 
@@ -195,9 +196,6 @@ public class UploadFragment extends Fragment implements View.OnClickListener {
         mStausPager.setCurrentItem(0);
         txt_tabs[0].setSelected(true);
         line_views[0].setSelected(true);
-
-        FontList.initEditingFontList(getActivity());
-        FontList.initServerFontList(GET_FONT_ORIGIN_ADDRESS);
 
     }
     public void initEvent() {

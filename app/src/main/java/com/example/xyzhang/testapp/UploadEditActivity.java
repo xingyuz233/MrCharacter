@@ -36,7 +36,7 @@ public class UploadEditActivity extends AppCompatActivity implements View.OnClic
 
     boolean editable;
     boolean edited;
-    private String originAddress = "http://111.230.231.55:8080/get_pic.php";
+    private String originAddress = "http://10.0.2.2:8080/get_pic.php";
 
     private void initView() {
         Intent intent = getIntent();

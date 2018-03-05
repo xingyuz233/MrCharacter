@@ -1,5 +1,6 @@
 package com.example.xyzhang.testapp;
 
+import android.app.Activity;
 import android.content.Context;
 
 import com.example.xyzhang.testapp.util.HttpUtil;
@@ -21,6 +22,9 @@ public class FontList {
     static List<String> editingFontList;
     private static List<Font> proccessingFontList;
     private static List<Font> finishedFontList;
+
+    private static boolean editingLoaded, remoteLoaded;
+
     //本地字体
     private static List<String> getEditingFontList(Context context) {
         List<String> newFontList = new ArrayList<>();
@@ -54,11 +58,18 @@ public class FontList {
         return newFontList;
     }
 
-    private static List<Font> getFinishedFontList(List<Font> fontList) {
+    private static List<Font> getFinishedFontList(List<Font> fontList, Context context) {
+        String path = context.getFilesDir().getAbsolutePath() + "/" + user + "/fonts";
+        File file = new File(path);
+        if (!file.exists()) {
+            System.out.println(file.mkdirs());
+        }
         List<Font> newFontList = new ArrayList<>();
         for (Font font: fontList) {
             if (font.isFinished()) {
                 newFontList.add(font);
+                if (new File(path + "/" + font.getName() + ".ttf").exists())
+                    font.setDownloaded(true);
             }
         }
         return newFontList;
@@ -69,33 +80,42 @@ public class FontList {
 
 
     //服务器字体
-    public static void initServerFontList(String address) {
-        try {
-            HttpUtil.sendGet(address, null,new HttpCallbackListener() {
-                @Override
-                public void onFinish(String response) {
-                    // SessionID.getInstance().setUser(user);
-                    Gson gson = new Gson();
-                    List<Font> fontList = gson.fromJson(response, new TypeToken<List<Font>>(){}.getType());
+    public static boolean initServerFontList(String address, final Context context, final Runnable callback) {
+        if (!remoteLoaded) {
+            remoteLoaded = true;
+            try {
+                HttpUtil.sendGet(address, null, new HttpCallbackListener() {
+                    @Override
+                    public void onFinish(String response) {
+                        // SessionID.getInstance().setUser(user);
+                        Gson gson = new Gson();
+                        List<Font> fontList = gson.fromJson(response, new TypeToken<List<Font>>() {
+                        }.getType());
 
-                    proccessingFontList = FontList.getProcessingFontList(fontList);
-                    finishedFontList = FontList.getFinishedFontList(fontList);
-                    //display(rootView, response);
-                }
+                        proccessingFontList = FontList.getProcessingFontList(fontList);
+                        finishedFontList = FontList.getFinishedFontList(fontList, context);
+                        //display(rootView, response);
+                        callback.run();
+                    }
 
-                @Override
-                public void onError(Exception e) {
+                    @Override
+                    public void onError(Exception e) {
 
-                }
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
+                    }
+                });
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return true;
         }
-
+        return false;
     }
 
     public static void initEditingFontList(Context context) {
-        editingFontList = getEditingFontList(context);
+        if (!editingLoaded) {
+            editingLoaded = true;
+            editingFontList = getEditingFontList(context);
+        }
     }
 
     public static boolean addFont(Context context, String fontName) {

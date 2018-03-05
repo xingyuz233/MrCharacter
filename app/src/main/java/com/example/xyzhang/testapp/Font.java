@@ -19,6 +19,7 @@ public class Font implements Serializable {
     private String userphone;
     private boolean finished;
     private double progress;
+    private boolean downloaded;
 
 
 
@@ -60,5 +61,13 @@ public class Font implements Serializable {
 
     public void setProgress(double progress) {
         this.progress = progress;
+    }
+
+    public boolean isDownloaded() {
+        return downloaded;
+    }
+
+    public void setDownloaded(boolean downloaded) {
+        this.downloaded = downloaded;
     }
 }
