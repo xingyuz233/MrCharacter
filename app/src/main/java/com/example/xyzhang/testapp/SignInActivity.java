@@ -8,6 +8,7 @@ import android.os.Handler;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.xyzhang.testapp.util.HttpUtil;
 import com.example.xyzhang.testapp.util.SessionID;
@@ -26,10 +27,9 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
             super.handleMessage(msg);
             if ("OK".equals(msg.obj.toString())){
                 jumpToInfo();
-            }else if ("Wrong".equals(msg.obj.toString())){
-                //todo
             }else {
                 //todo
+                Toast.makeText(SignInActivity.this, "用户信息不正确！", Toast.LENGTH_LONG).show();
             }
         }
     };
