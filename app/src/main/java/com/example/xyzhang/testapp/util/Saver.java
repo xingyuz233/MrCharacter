@@ -6,6 +6,7 @@ import android.os.Environment;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.util.Date;
 
 
 /**
@@ -47,15 +48,16 @@ public class Saver {
         }
     }
 
-    public static void savePng(Context context, Bitmap bitmap, String fileName) {
+    public static void savePng(Context context, Bitmap bitmap, String fileName, String time) {
 
         System.out.println("----------------------saving png " + fileName);
         try {
             String path = Environment.getExternalStorageDirectory().getAbsolutePath();
-            File dir = new File(path + "/tempfonts");
+            File dir = new File(path +  "/MyFonts/" + SessionID.getInstance().getUser() + "/" + time);
             if (!dir.exists())
                 System.out.println(dir.mkdirs());
-            File file = new File(path + "/tempfonts/" + fileName);
+
+            File file = new File(dir + "/"  + fileName);
             if (!file.exists()) {
                 System.out.println(file.createNewFile());
             }

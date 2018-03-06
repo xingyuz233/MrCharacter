@@ -159,7 +159,7 @@ public class UserFragment extends Fragment implements View.OnClickListener {
 
                         SessionID.getInstance().setId(null);
                         SessionID.getInstance().setUser(null);
-                        Intent intent = new Intent(getActivity(),  SignInActivity.class);
+                        Intent intent = new Intent(getActivity(),  MainActivity.class);
                         startActivity(intent);
                         getActivity().finish();
 

@@ -13,6 +13,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.xyzhang.testapp.util.SessionID;
+
 import java.io.FileInputStream;
 
 public class TextFragment extends Fragment {
@@ -49,7 +51,10 @@ public class TextFragment extends Fragment {
         FileInputStream fis=null;
         try {
             fis = new FileInputStream(
-                    Environment.getExternalStorageDirectory().getAbsolutePath()+"/tempfonts/"+pageNumber+".png");
+                    Environment.getExternalStorageDirectory().getAbsolutePath()
+                            + "/MyFonts/" + SessionID.getInstance().getUser() + "/"
+                            + getActivity().getIntent().getStringExtra(TextPagerActivity.EXTRA_TIME_CREATED) + "/"
+                            +pageNumber+".png");
         } catch (Exception e) {
             e.printStackTrace();
         }
