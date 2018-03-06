@@ -15,11 +15,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import com.example.xyzhang.testapp.util.DownloadFileAsync;
+import com.example.xyzhang.testapp.util.SessionID;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
@@ -274,21 +278,7 @@ public class StatusFragment extends Fragment {
                 // todo display picture in imgFont
                 ImageView imgFont = view.findViewById(R.id.imgFont);
 
-//                view.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View v) {
-//                        Intent intent = new Intent(getActivity(), UploadEditActivity.class);
-//                        //intent.putExtra("FONT_ID", font.getId())
-//                        intent.putExtra("FONT_NAME", fontName);
-//                        startActivity(intent);
-//                    }
-//                });
-//                view.setOnLongClickListener(new View.OnLongClickListener() {
-//                    @Override
-//                    public boolean onLongClick(View view) {
-//                        return false;
-//                    }
-//                });
+
                 break;
             case IN_PROCESSING:
                 Font font = fontList.get(index);
@@ -303,7 +293,48 @@ public class StatusFragment extends Fragment {
                         font.getProgress() * 100, getString(R.string.percentage_mark)));
                 break;
             case FINISHED:
-                // todo
+                final Font fontFinished = fontList.get(index);
+                txtTitle = view.findViewById(R.id.txtTitleFinished);
+                txtTitle.setText(fontFinished.getName());
+
+                final ProgressBar prgDownload = view.findViewById(R.id.prgDownload);
+                final Button btnDownload = view.findViewById(R.id.btnDownload);
+                prgDownload.setVisibility(View.GONE);
+
+                if (fontFinished.isDownloaded()) {
+                    btnDownload.setText(R.string.downloaded);
+                    btnDownload.setEnabled(false);
+                } else {
+                    btnDownload.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            String path = getActivity().getFilesDir().getAbsolutePath() + "/" +
+                                    SessionID.getInstance().getUser() + "/fonts/" + fontFinished.getName() + ".ttf";
+                            new DownloadFileAsync(new DownloadFileAsync.UpdateTask() {
+                                @Override
+                                public void onProgressUpdate(double progress) {
+                                    prgDownload.setProgress((int) (progress * 100));
+                                }
+
+                                @Override
+                                public void onPostExecute(String message) {
+                                    prgDownload.setVisibility(View.GONE);
+                                    btnDownload.setVisibility(View.VISIBLE);
+                                    btnDownload.setText(R.string.downloaded);
+                                    btnDownload.setEnabled(false);
+                                    fontFinished.setDownloaded(true);
+                                }
+
+                                @Override
+                                public void onPreExecute() {
+                                    prgDownload.setVisibility(View.VISIBLE);
+                                    btnDownload.setVisibility(View.GONE);
+                                }
+                            }).execute(fontFinished.getName(), path);
+                        }
+                    });
+                }
+
                 break;
         }
 

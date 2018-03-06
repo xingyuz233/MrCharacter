@@ -10,7 +10,20 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-public abstract class DownloadFileAsync extends AsyncTask<String, Double, String> {
+public class DownloadFileAsync extends AsyncTask<String, Double, String> {
+
+    public DownloadFileAsync(UpdateTask task) {
+        this.task = task;
+    }
+
+    public interface UpdateTask {
+        void onProgressUpdate(double progress);
+        void onPostExecute(String message);
+        void onPreExecute();
+    }
+
+    private UpdateTask task;
+
     @Override
     protected String doInBackground(String... params) {
         int count;
@@ -66,8 +79,17 @@ public abstract class DownloadFileAsync extends AsyncTask<String, Double, String
     }
 
     @Override
-    protected abstract void onPostExecute(String s);
+    protected void onPostExecute(String s) {
+        task.onPostExecute(s);
+    }
 
     @Override
-    protected abstract void onProgressUpdate(Double... values);
+    protected void onProgressUpdate(Double... values) {
+        task.onProgressUpdate(values[0]);
+    }
+
+    @Override
+    protected void onPreExecute() {
+        task.onPreExecute();
+    }
 }

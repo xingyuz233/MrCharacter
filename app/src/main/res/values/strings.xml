@@ -20,4 +20,6 @@
     <string name="percentage_mark">%</string>
     <string name="rename">重命名</string>
     <string name="delete">删除</string>
+    <string name="download">下载</string>
+    <string name="downloaded">已下载</string>
 </resources>

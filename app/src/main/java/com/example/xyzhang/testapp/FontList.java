@@ -77,10 +77,6 @@ public class FontList {
         return newFontList;
     }
 
-
-
-
-
     //服务器字体
     public static boolean initServerFontList(final Context context, final Runnable callback) {
         if (!remoteLoaded) {
