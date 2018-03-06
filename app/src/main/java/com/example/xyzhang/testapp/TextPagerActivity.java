@@ -17,12 +17,17 @@ import java.util.UUID;
 public class TextPagerActivity extends FragmentActivity {
     private static final String EXTRA_PAGE_COUNT =
             "com.example.xyzhang.intent.page_count";
+    public static final String EXTRA_TIME_CREATED =
+            "com.example.xyzhang.intent.time_created";
 
     private ViewPager mViewPager;
+    private int pageCount;
 
-    public static Intent newIntent(Context packageContext, int pageCount) {
+    public static Intent newIntent(Context packageContext, int pageCount, String time) {
         Intent intent = new Intent(packageContext, TextPagerActivity.class);
         intent.putExtra(EXTRA_PAGE_COUNT, pageCount);
+        intent.putExtra(EXTRA_TIME_CREATED, time);
+
         return intent;
     }
 
@@ -30,6 +35,8 @@ public class TextPagerActivity extends FragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_text_pager);
+
+        pageCount = getIntent().getIntExtra(EXTRA_PAGE_COUNT, 0);
 
         mViewPager = (ViewPager) findViewById(R.id.activity_text_pager_view_pager);
 
@@ -44,7 +51,7 @@ public class TextPagerActivity extends FragmentActivity {
 
             @Override
             public int getCount() {
-                return 3;
+                return pageCount;
             }
         });
 
