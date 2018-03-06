@@ -3,6 +3,7 @@ package com.example.xyzhang.testapp;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.support.design.widget.FloatingActionButton;
@@ -21,6 +22,9 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.example.xyzhang.testapp.util.SessionID;
+
+import java.io.File;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -273,7 +277,11 @@ public class StatusFragment extends Fragment {
 
                 // todo display picture in imgFont
                 ImageView imgFont = view.findViewById(R.id.imgFont);
-
+                String firstFontPic = getActivity().getFilesDir().getAbsolutePath() + "/" + SessionID.getInstance().getUser() + "/" + fontName + "/" + "0.png";
+                File file = new File(firstFontPic);
+                if (file.exists()) {
+                    imgFont.setImageURI(Uri.fromFile(file));
+                }
 //                view.setOnClickListener(new View.OnClickListener() {
 //                    @Override
 //                    public void onClick(View v) {

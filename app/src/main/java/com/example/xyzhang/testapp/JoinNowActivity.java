@@ -37,11 +37,13 @@ public class JoinNowActivity extends AppCompatActivity implements View.OnClickLi
     private void jumpToSignIn() {
         Intent intent = new Intent(JoinNowActivity.this, SignInActivity.class);
         startActivity(intent);
+        finish();
     }
 
     private void jumpToSendCode() {
-        Intent intent = new Intent(JoinNowActivity.this, SendCodeActivity.class);
+        Intent intent = new Intent(JoinNowActivity.this, InfoActivity.class);
         startActivity(intent);
+        finish();
     }
     @Override
     protected void onCreate(Bundle savedInstanceState) {

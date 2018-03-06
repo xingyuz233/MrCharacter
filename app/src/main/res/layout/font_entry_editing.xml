@@ -4,13 +4,17 @@
     android:layout_height="100dp"
     android:layout_margin="10dp"
     android:descendantFocusability="blocksDescendants">
-
+    <LinearLayout
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_weight="1"
+        android:gravity="center">
     <ImageView
         android:id="@+id/imgFont"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:layout_weight="1"
-        android:src="@drawable/empty" />
+        android:background="@drawable/empty" />
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="200dp"

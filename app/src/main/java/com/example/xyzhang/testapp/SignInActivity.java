@@ -37,11 +37,13 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
     private void jumpToInfo() {
         Intent intent = new Intent(SignInActivity.this, InfoActivity.class);
         startActivity(intent);
+        finish();
     }
 
     private void jumpToJoinNow() {
         Intent intent = new Intent(SignInActivity.this, JoinNowActivity.class);
         startActivity(intent);
+        finish();
     }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
