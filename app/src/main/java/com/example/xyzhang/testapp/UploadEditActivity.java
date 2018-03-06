@@ -1,5 +1,6 @@
 package com.example.xyzhang.testapp;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -9,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.SeekBar;
@@ -181,9 +183,7 @@ public class UploadEditActivity extends AppCompatActivity implements View.OnClic
                 display();
                 break;
             case R.id.backBtn:
-                if (editable && edited) {
-                    Saver.save(UploadEditActivity.this, mDrawingView.toBitMap(), fontName, "" + id);
-                }
+
                 finish();
                 break;
             case R.id.submitBtn:
@@ -192,7 +192,16 @@ public class UploadEditActivity extends AppCompatActivity implements View.OnClic
 
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (editable && edited) {
+            Saver.save(UploadEditActivity.this, mDrawingView.toBitMap(), fontName, "" + id);
+        }
+    }
+
     private void upload(Context context) {
+
 
 //        Context context = getActivity();
         String path = context.getFilesDir().getAbsolutePath();
@@ -206,26 +215,19 @@ public class UploadEditActivity extends AppCompatActivity implements View.OnClic
         }
         File[] files = file.listFiles();
 
-        String[] picArray = new String[files.length];
+        final String[] picArray = new String[files.length];
         for (int i = 0; i < picArray.length; i++) {
             picArray[i] = files[i].getName();
         }
 
-        /*
-        AlertDialog.Builder dialog = new AlertDialog.Builder(this);
-        dialog.setTitle("确定要退出吗？");
-        dialog.setView();
-        dialog.setCancelable(false);
-        dialog.show();
-        */
-        // 设置水平进度条
+
+
         final ProgressDialog mProgressDialog = new ProgressDialog(this);
         mProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
         mProgressDialog.setCancelable(true);
         mProgressDialog.setCanceledOnTouchOutside(false);
         mProgressDialog.setIcon(R.mipmap.ic_launcher);
         mProgressDialog.setTitle("提示");
-
         mProgressDialog.setButton(DialogInterface.BUTTON_POSITIVE, "确定",
                 new DialogInterface.OnClickListener() {
 
@@ -237,33 +239,96 @@ public class UploadEditActivity extends AppCompatActivity implements View.OnClic
                 });
 
         mProgressDialog.setMessage("上传中...");
-        mProgressDialog.show();
 
 
 
-        new UploadFileAsync(getFilesDir().getAbsolutePath() + "/" +
-                user + "/" + fontName + "/", fontName, false) { //todo
-            @Override
-            protected void onPostExecute(String result) {
-                System.out.println(result);
-                mProgressDialog.setProgress(100);
-                mProgressDialog.dismiss();
-                Toast.makeText(UploadEditActivity.this, "提交成功", Toast.LENGTH_LONG);
-                setResult(1);
-                finish();
+        if (FontList.existInProccess(fontName) || FontList.existInFinished(fontName)) {
+            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+
+            dialog.setTitle("该字体已上传，确定要覆盖吗？");
+            dialog.setCancelable(false);
+            dialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+
+                    mProgressDialog.show();
 
 
-            }
+                    new UploadFileAsync(getFilesDir().getAbsolutePath() + "/" +
+                            user + "/" + fontName + "/", fontName, true) { //todo
+                        @Override
+                        protected void onPostExecute(String result) {
+                            System.out.println(result);
+                            mProgressDialog.setProgress(100);
+                            mProgressDialog.dismiss();
+                            Toast.makeText(UploadEditActivity.this, "提交成功", Toast.LENGTH_LONG);
+                            setResult(1);
+                            finish();
 
-            @Override
-            protected void onProgressUpdate(Double... values) {
-                System.out.println("progress " + values[0]);
-                mProgressDialog.setProgress((int)(values[0]*100));
 
-            }
+                        }
 
-        }.execute(picArray);
+                        @Override
+                        protected void onProgressUpdate(Double... values) {
+                            System.out.println("progress " + values[0]);
+                            mProgressDialog.setProgress((int) (values[0] * 100));
 
+                        }
+
+                    }.execute(picArray);
+
+
+                }
+
+
+            });
+            dialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+
+                }
+            });
+            dialog.show();
+        }
+        else {
+        /*
+        AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+        dialog.setTitle("确定要退出吗？");
+        dialog.setView();
+        dialog.setCancelable(false);
+        dialog.show();
+        */
+            // 设置水平进度条
+
+
+
+            mProgressDialog.show();
+
+
+            new UploadFileAsync(getFilesDir().getAbsolutePath() + "/" +
+                    user + "/" + fontName + "/", fontName, false) { //todo
+                @Override
+                protected void onPostExecute(String result) {
+                    System.out.println(result);
+                    mProgressDialog.setProgress(100);
+                    mProgressDialog.dismiss();
+                    Toast.makeText(UploadEditActivity.this, "提交成功", Toast.LENGTH_LONG);
+                    setResult(1);
+                    finish();
+
+
+                }
+
+                @Override
+                protected void onProgressUpdate(Double... values) {
+                    System.out.println("progress " + values[0]);
+                    mProgressDialog.setProgress((int) (values[0] * 100));
+
+                }
+
+            }.execute(picArray);
+        }
 
     }
 

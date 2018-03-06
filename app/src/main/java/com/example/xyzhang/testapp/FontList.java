@@ -130,6 +130,24 @@ public class FontList {
         return false;
     }
 
+    public static boolean existInProccess(String fontName) {
+        for (Font font : proccessingFontList) {
+            if (font.getName().equals(fontName)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static boolean existInFinished(String fontName) {
+        for (Font font : finishedFontList) {
+            if (font.getName().equals(fontName)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public static boolean addFont(Context context, String fontName) {
         //        Context context = getActivity();
         String path = context.getFilesDir().getAbsolutePath();
