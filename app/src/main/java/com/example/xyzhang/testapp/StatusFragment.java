@@ -3,6 +3,7 @@ package com.example.xyzhang.testapp;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
@@ -184,9 +185,11 @@ public class StatusFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         System.out.println("result" + requestCode + " " + resultCode);
-        if (requestCode == 1 && resultCode == 1) {
-            FontList.initServerFontList(getActivity(), null, true);
-        }
+        if (requestCode == 1)
+            if (resultCode == 1) {
+                FontList.initServerFontList(getActivity(), null, true);
+            } else if (resultCode == 2)
+                adapter.notifyDataSetChanged();
     }
 
     @Override
@@ -205,7 +208,7 @@ public class StatusFragment extends Fragment {
             case R.id.menuDelete: {
                 AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
 
-                dialog.setTitle("确认要删除吗？");
+                dialog.setTitle(R.string.deleteConfirm);
 
                 dialog.setCancelable(false);
                 dialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -232,7 +235,7 @@ public class StatusFragment extends Fragment {
                 AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
                 final EditText edit = new EditText(dialog.getContext());
 
-                dialog.setTitle("请输入字体名称");
+                dialog.setTitle(R.string.fontNamePrompt);
                 dialog.setView(edit);
                 edit.setText(fontName);
 
@@ -245,7 +248,7 @@ public class StatusFragment extends Fragment {
                         if (FontList.existInEdit(newFontName)) {
 
                             AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
-                            dialog.setTitle("该字体已经存在！");
+                            dialog.setTitle(R.string.fontAlreadyExists);
 
                             dialog.setCancelable(false);
                             dialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -340,7 +343,8 @@ public class StatusFragment extends Fragment {
 
                 if (fontFinished.isDownloaded()) {
                     btnDownload.setText(R.string.downloaded);
-                    btnDownload.setEnabled(false);
+                    btnDownload.setClickable(false);
+                    btnDownload.setBackgroundColor(Color.parseColor("#808080"));
                 } else {
                     btnDownload.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -358,7 +362,8 @@ public class StatusFragment extends Fragment {
                                     prgDownload.setVisibility(View.GONE);
                                     btnDownload.setVisibility(View.VISIBLE);
                                     btnDownload.setText(R.string.downloaded);
-                                    btnDownload.setEnabled(false);
+                                    btnDownload.setClickable(false);
+                                    btnDownload.setBackgroundColor(Color.parseColor("#808080"));
                                     fontFinished.setDownloaded(true);
                                 }
 

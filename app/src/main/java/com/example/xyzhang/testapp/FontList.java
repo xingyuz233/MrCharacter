@@ -87,6 +87,7 @@ public class FontList {
                         System.out.println("response-----" + response);
                         List<Font> fontList = gson.fromJson(response, new TypeToken<List<Font>>() {
                         }.getType());
+                        System.out.println("fontlist-----" + fontList.get(2).isFinished());
 
                         proccessingFontList = FontList.getProcessingFontList(fontList);
                         finishedFontList = FontList.getFinishedFontList(fontList, context);

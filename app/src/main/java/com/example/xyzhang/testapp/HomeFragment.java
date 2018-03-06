@@ -2,6 +2,7 @@ package com.example.xyzhang.testapp;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.Point;
 import android.net.Uri;
 import android.os.Bundle;
@@ -16,6 +17,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 
+import com.example.xyzhang.testapp.util.SessionID;
 import com.example.xyzhang.testapp.util.TextWrapper;
 
 import java.io.File;
@@ -55,8 +57,8 @@ public class HomeFragment extends Fragment {
     }
 
     private List<File> getFonts() {
-//        String path = getActivity().getFilesDir().getAbsolutePath() + "/" + SessionID.getInstance().getUser() + "/fonts";
-        String path = Environment.getExternalStorageDirectory().getAbsolutePath()  + "/tempfonts";
+        String path = getActivity().getFilesDir().getAbsolutePath() + "/" + SessionID.getInstance().getUser() + "/fonts";
+//        String path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/tempfonts";
 
         File fontDir = new File(path);
         if (!fontDir.exists()) {
@@ -68,7 +70,7 @@ public class HomeFragment extends Fragment {
             public boolean accept(File pathname) {
                 System.out.println(pathname);
 
-                if(pathname.isDirectory()){
+                if (pathname.isDirectory()) {
                     return false;
                 }
 
@@ -136,17 +138,18 @@ public class HomeFragment extends Fragment {
         mSpinner = rootView.findViewById(R.id.chooseFontSpinner);
 
         List<String> fontNameList = new ArrayList<>();
-        for (File font: fontList) {
+        for (File font : fontList) {
             fontNameList.add(font.getName());
         }
-        ArrayAdapter<String> spinAdapter=new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, fontNameList);
+        ArrayAdapter<String> spinAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, fontNameList);
         mSpinner.setAdapter(spinAdapter);
 
         if (!fontList.isEmpty()) {
-            mSpinner.setSelection(0,true);
+            mSpinner.setSelection(0, true);
         } else {
             mSpinner.setEnabled(false);
-            getPictureBtn.setEnabled(false);
+            getPictureBtn.setClickable(false);
+            getPictureBtn.setBackgroundColor(Color.parseColor("#808080"));
         }
 
         return rootView;

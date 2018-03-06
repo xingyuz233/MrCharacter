@@ -1,8 +1,10 @@
 package com.example.xyzhang.testapp;
 
 import android.app.FragmentTransaction;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.AttributeSet;
 import android.view.View;
 import android.view.Window;
 import android.widget.TextView;
@@ -23,7 +25,7 @@ public class InfoActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_info);
 
         bindView();
-
+        switchTab(R.id.txt_home);
     }
 
     //UI组件初始化与事件绑定
@@ -59,11 +61,10 @@ public class InfoActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    @Override
-    public void onClick(View v) {
+    private void switchTab(int index) {
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
         hideAllFragment(transaction);
-        switch (v.getId()) {
+        switch (index) {
             case R.id.txt_home:
                 selected();
                 tabHome.setSelected(true);
@@ -99,5 +100,10 @@ public class InfoActivity extends AppCompatActivity implements View.OnClickListe
         }
 
         transaction.commit();
+    }
+
+    @Override
+    public void onClick(View v) {
+        switchTab(v.getId());
     }
 }
