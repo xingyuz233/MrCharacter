@@ -191,10 +191,33 @@ public class StatusFragment extends Fragment {
         int index = info.position;
         final String fontName = fontNameList.get(index);
         switch (item.getItemId()) {
-            case R.id.menuDelete:
+            case R.id.menuDelete: {
+                AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
 
+                dialog.setTitle("确认要删除吗？");
+
+                dialog.setCancelable(false);
+                dialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        FontList.removeFont(getActivity(), fontName);
+                        adapter.notifyDataSetChanged();
+//                      displayEditFont(FontList.editingFontList);
+
+                    }
+
+                });
+                dialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                    }
+                });
+                dialog.show();
                 return true;
-            case R.id.menuRename:
+            }
+            case R.id.menuRename: {
                 AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
                 final EditText edit = new EditText(dialog.getContext());
 
@@ -224,9 +247,8 @@ public class StatusFragment extends Fragment {
                             dialog.show();
 
                         } else {
-                            int index = FontList.editingFontList.indexOf(fontName);
-                            FontList.editingFontList.set(index, newFontName);
-                            FontList.renameEditingFont(getActivity(), fontName, newFontName);
+
+                            FontList.renameFont(getActivity(), fontName, newFontName);
                             adapter.notifyDataSetChanged();
 //                            displayEditFont(FontList.editingFontList);
                         }
@@ -241,6 +263,7 @@ public class StatusFragment extends Fragment {
                 });
                 dialog.show();
                 return true;
+            }
             default:
                 return super.onContextItemSelected(item);
         }

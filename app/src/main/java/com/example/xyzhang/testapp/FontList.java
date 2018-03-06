@@ -2,6 +2,7 @@ package com.example.xyzhang.testapp;
 
 import android.app.Activity;
 import android.content.Context;
+import android.util.Log;
 
 import com.example.xyzhang.testapp.util.HttpUtil;
 import com.example.xyzhang.testapp.util.SessionID;
@@ -156,14 +157,40 @@ public class FontList {
         return finishedFontList;
     }
 
-    public static boolean renameEditingFont(Context context, String fontName, String newFontName) {
+    public static boolean renameFont(Context context, String fontName, String newFontName) {
         String path = context.getFilesDir().getAbsolutePath();
 //            String path = Environment.getExternalStorageDirectory().getAbsolutePath();
         System.out.println(path);
         File file = new File(path + "/" + user + "/" + fontName);
         File newFile = new File(path + "/" + user + "/" + newFontName);
         if (file.exists()) {
+            int index = FontList.editingFontList.indexOf(fontName);
+            FontList.editingFontList.set(index, newFontName);
             file.renameTo(newFile);
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
+    public static boolean removeFont(Context context, String fontName) {
+        String path = context.getFilesDir().getAbsolutePath();
+//            String path = Environment.getExternalStorageDirectory().getAbsolutePath();
+        System.out.println(path);
+        File file = new File(path + "/" + user + "/" + fontName);
+        if (file.exists()) {
+            int index = FontList.editingFontList.indexOf(fontName);
+            FontList.editingFontList.remove(fontName);
+            File[] files = file.listFiles();
+            for (int i = 0; i < files.length; i++) {
+                if (files[i].isFile()){
+                    File photoFile = new File(files[i].getPath());
+                    Log.d("photoPath -->> ", photoFile.getPath());
+                    photoFile.delete();
+                }
+            }
+            System.out.print(file.delete());
             return true;
         }
         else {
