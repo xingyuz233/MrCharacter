@@ -9,6 +9,9 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.widget.Toast;
+
+import com.example.xyzhang.testapp.util.SessionID;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,6 +57,9 @@ public class TextPagerActivity extends FragmentActivity {
                 return pageCount;
             }
         });
+
+        Toast.makeText(this, "图片已经保存至 " + "MyFonts/" + SessionID.getInstance().getUser() + "/"
+                + getIntent().getStringExtra(TextPagerActivity.EXTRA_TIME_CREATED) + " 目录下", Toast.LENGTH_SHORT).show();
 
     }
 }
