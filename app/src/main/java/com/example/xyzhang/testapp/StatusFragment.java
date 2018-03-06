@@ -3,6 +3,7 @@ package com.example.xyzhang.testapp;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.support.design.widget.FloatingActionButton;
@@ -25,6 +26,7 @@ import android.widget.TextView;
 import com.example.xyzhang.testapp.util.DownloadFileAsync;
 import com.example.xyzhang.testapp.util.SessionID;
 
+import java.io.File;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -40,7 +42,6 @@ public class StatusFragment extends Fragment {
     private List<Font> fontList;
 
     private BaseAdapter adapter;
-    private static final String GET_FONT_ORIGIN_ADDRESS = "http://10.0.2.2:8080/get_font.php";
 
     public StatusFragment() {
         // Required empty public constructor
@@ -70,6 +71,7 @@ public class StatusFragment extends Fragment {
             case IN_EDIT:
                 FontList.initEditingFontList(getActivity());
                 fontNameList = FontList.editingFontList;
+                System.out.println("fontnamelist" + fontNameList);
                 break;
             case IN_PROCESSING:
                 if (FontList.initServerFontList(getActivity(), new Runnable() {
@@ -83,7 +85,7 @@ public class StatusFragment extends Fragment {
                             }
                         });
                     }
-                }))
+                }, false))
                     fontList = new ArrayList<>();
                 else
                     fontList = FontList.getProcessingFontList();
@@ -100,7 +102,7 @@ public class StatusFragment extends Fragment {
                             }
                         });
                     }
-                }))
+                }, false))
                     fontList = new ArrayList<>();
                 else
                     fontList = FontList.getFinishedFontList();
@@ -169,13 +171,22 @@ public class StatusFragment extends Fragment {
                     Intent intent = new Intent(getActivity(), UploadEditActivity.class);
                     //intent.putExtra("FONT_ID", font.getId())
                     intent.putExtra("FONT_NAME", fontName);
-                    startActivity(intent);
+                    startActivityForResult(intent, 1);
                 }
             });
         } else {
             ((ViewGroup) view).removeView(addButton);
         }
         return view;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        System.out.println("result" + requestCode + " " + resultCode);
+        if (requestCode == 1 && resultCode == 1) {
+            FontList.initServerFontList(getActivity(), null, true);
+        }
     }
 
     @Override
@@ -298,9 +309,12 @@ public class StatusFragment extends Fragment {
                 txtTitle = view.findViewById(R.id.txtTitle);
                 txtTitle.setText(fontName);
 
-                // todo display picture in imgFont
                 ImageView imgFont = view.findViewById(R.id.imgFont);
-
+                String firstFontPic = getActivity().getFilesDir().getAbsolutePath() + "/" + SessionID.getInstance().getUser() + "/" + fontName + "/" + "0.png";
+                File file = new File(firstFontPic);
+                if (file.exists()) {
+                    imgFont.setImageURI(Uri.fromFile(file));
+                }
 
                 break;
             case IN_PROCESSING:

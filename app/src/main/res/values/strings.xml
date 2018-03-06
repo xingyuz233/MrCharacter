@@ -22,4 +22,7 @@
     <string name="delete">删除</string>
     <string name="download">下载</string>
     <string name="downloaded">已下载</string>
+    <string name="uploading">上传中…</string>
+    <string name="ok">确定</string>
+    <string name="uploadSuccess">提交成功</string>
 </resources>

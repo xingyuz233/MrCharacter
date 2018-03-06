@@ -77,22 +77,4 @@ public class Saver {
             e.printStackTrace();
         }
     }
-
-    public static void upload(Context context) {
-
-        new UploadFileAsync(Environment.getExternalStorageDirectory().getAbsolutePath() +
-                "/tempfonts", "Any-Font") {
-            @Override
-            protected void onPostExecute(String result) {
-                System.out.println(result);
-            }
-
-            @Override
-            protected void onProgressUpdate(Double... values) {
-                System.out.println("progress " + values[0]);
-            }
-        }.execute("1.png", "2.png", "3.png");
-
-
-    }
 }

@@ -40,7 +40,7 @@ public class HomeDisplayActivity extends AppCompatActivity {
         mSaveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Saver.upload(HomeDisplayActivity.this);
+//                Saver.upload(HomeDisplayActivity.this);
             }
         });
 

@@ -19,10 +19,12 @@ import java.util.Arrays;
 public abstract class UploadFileAsync extends AsyncTask<String, Double, String> {
     private String sourceFileUri;
     private String fontName;
+    private boolean overwrite;
 
-    public UploadFileAsync(String sourceFileUri, String fontName) {
+    public UploadFileAsync(String sourceFileUri, String fontName, boolean overwrite) {
         this.sourceFileUri = sourceFileUri;
         this.fontName = fontName;
+        this.overwrite = overwrite;
     }
 
     @Override
@@ -64,6 +66,10 @@ public abstract class UploadFileAsync extends AsyncTask<String, Double, String> 
                 dos.writeBytes(twoHyphens + boundary + lineEnd);
                 dos.writeBytes("Content-Disposition: form-data; name=\"font_name\"" + lineEnd + lineEnd);
                 dos.writeBytes(fontName + lineEnd);
+
+                dos.writeBytes(twoHyphens + boundary + lineEnd);
+                dos.writeBytes("Content-Disposition: form-data; name=\"overwrite\"" + lineEnd + lineEnd);
+                dos.writeBytes((overwrite ? 1 : 0) + lineEnd);
 
                 dos.writeBytes(twoHyphens + boundary + lineEnd);
                 dos.writeBytes("Content-Disposition: form-data; name=\"pic_name\"" + lineEnd + lineEnd);

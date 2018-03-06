@@ -1,6 +1,5 @@
 package com.example.xyzhang.testapp;
 
-import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 
@@ -28,6 +27,8 @@ public class FontList {
 
     private static boolean editingLoaded, remoteLoaded;
 
+    private static List<Runnable> observers = new ArrayList<>();
+
     //本地字体
     private static List<String> getEditingFontList(Context context) {
         List<String> newFontList = new ArrayList<>();
@@ -40,20 +41,16 @@ public class FontList {
             System.out.println(file.mkdirs());
         }
         File[] files = file.listFiles();
-        for (File f: files) {
+        for (File f : files) {
             newFontList.add(f.getName());
         }
         return newFontList;
     }
 
 
-
-
-
-
     private static List<Font> getProcessingFontList(List<Font> fontList) {
         List<Font> newFontList = new ArrayList<>();
-        for (Font font: fontList) {
+        for (Font font : fontList) {
             if (!font.isFinished()) {
                 newFontList.add(font);
             }
@@ -68,7 +65,7 @@ public class FontList {
             System.out.println(file.mkdirs());
         }
         List<Font> newFontList = new ArrayList<>();
-        for (Font font: fontList) {
+        for (Font font : fontList) {
             if (font.isFinished()) {
                 newFontList.add(font);
                 if (new File(path + "/" + font.getName() + ".ttf").exists())
@@ -79,8 +76,8 @@ public class FontList {
     }
 
     //服务器字体
-    public static boolean initServerFontList(final Context context, final Runnable callback) {
-        if (!remoteLoaded) {
+    public static boolean initServerFontList(final Context context, final Runnable callback, final boolean refresh) {
+        if (!remoteLoaded || refresh) {
             try {
                 HttpUtil.sendGet(GET_FONT_ORIGIN_ADDRESS, null, new HttpCallbackListener() {
                     @Override
@@ -95,7 +92,13 @@ public class FontList {
                         finishedFontList = FontList.getFinishedFontList(fontList, context);
                         remoteLoaded = true;
                         //display(rootView, response);
-                        callback.run();
+                        if (!refresh) {
+                            observers.add(callback);
+                            if (callback != null)
+                                callback.run();
+                        } else
+                            for (Runnable runnable : observers)
+                                runnable.run();
                     }
 
                     @Override
@@ -119,7 +122,7 @@ public class FontList {
     }
 
     public static boolean existInEdit(String fontName) {
-        for (String font: editingFontList) {
+        for (String font : editingFontList) {
             if (font.equals(fontName)) {
                 return true;
             }
@@ -137,12 +140,10 @@ public class FontList {
             System.out.println(file.mkdirs());
             editingFontList.add(fontName);
             return true;
-        }
-        else {
+        } else {
             return false;
         }
     }
-
 
 
     public static List<Font> getProcessingFontList() {
@@ -164,8 +165,7 @@ public class FontList {
             FontList.editingFontList.set(index, newFontName);
             file.renameTo(newFile);
             return true;
-        }
-        else {
+        } else {
             return false;
         }
     }
