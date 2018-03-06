@@ -7,9 +7,13 @@ import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -64,7 +68,7 @@ public class StatusFragment extends Fragment {
                 fontNameList = FontList.editingFontList;
                 break;
             case IN_PROCESSING:
-                if (FontList.initServerFontList(GET_FONT_ORIGIN_ADDRESS, getActivity(), new Runnable() {
+                if (FontList.initServerFontList(getActivity(), new Runnable() {
                     @Override
                     public void run() {
                         getActivity().runOnUiThread(new Runnable() {
@@ -81,7 +85,7 @@ public class StatusFragment extends Fragment {
                     fontList = FontList.getProcessingFontList();
                 break;
             case FINISHED:
-                if (FontList.initServerFontList(GET_FONT_ORIGIN_ADDRESS, getActivity(), new Runnable() {
+                if (FontList.initServerFontList(getActivity(), new Runnable() {
                     @Override
                     public void run() {
                         getActivity().runOnUiThread(new Runnable() {
@@ -103,6 +107,7 @@ public class StatusFragment extends Fragment {
 
         FloatingActionButton addButton = view.findViewById(R.id.addButton);
         if (status == IN_EDIT) {
+            registerForContextMenu(listView);
             addButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -153,10 +158,88 @@ public class StatusFragment extends Fragment {
                     dialog.show();
                 }
             });
+            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                    String fontName = fontNameList.get(i);
+                    Intent intent = new Intent(getActivity(), UploadEditActivity.class);
+                    //intent.putExtra("FONT_ID", font.getId())
+                    intent.putExtra("FONT_NAME", fontName);
+                    startActivity(intent);
+                }
+            });
         } else {
             ((ViewGroup) view).removeView(addButton);
         }
         return view;
+    }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        MenuInflater inflater = getActivity().getMenuInflater();
+        inflater.inflate(R.menu.editing_font_menu, menu);
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+        int index = info.position;
+        final String fontName = fontNameList.get(index);
+        switch (item.getItemId()) {
+            case R.id.menuDelete:
+
+                return true;
+            case R.id.menuRename:
+                AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
+                final EditText edit = new EditText(dialog.getContext());
+
+                dialog.setTitle("请输入字体名称");
+                dialog.setView(edit);
+                edit.setText(fontName);
+
+                dialog.setCancelable(false);
+                dialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        String newFontName = edit.getText().toString();
+                        if (FontList.existInEdit(newFontName)) {
+
+                            AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
+                            dialog.setTitle("该字体已经存在！");
+
+                            dialog.setCancelable(false);
+                            dialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+
+                                }
+                            });
+
+                            dialog.show();
+
+                        } else {
+                            int index = FontList.editingFontList.indexOf(fontName);
+                            FontList.editingFontList.set(index, newFontName);
+                            FontList.renameEditingFont(getActivity(), fontName, newFontName);
+                            adapter.notifyDataSetChanged();
+//                            displayEditFont(FontList.editingFontList);
+                        }
+                    }
+
+                });
+                dialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                    }
+                });
+                dialog.show();
+                return true;
+            default:
+                return super.onContextItemSelected(item);
+        }
     }
 
     private int getCount() {
@@ -191,15 +274,21 @@ public class StatusFragment extends Fragment {
                 // todo display picture in imgFont
                 ImageView imgFont = view.findViewById(R.id.imgFont);
 
-                view.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent intent = new Intent(getActivity(), UploadEditActivity.class);
-                        //intent.putExtra("FONT_ID", font.getId())
-                        intent.putExtra("FONT_NAME", fontName);
-                        startActivity(intent);
-                    }
-                });
+//                view.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        Intent intent = new Intent(getActivity(), UploadEditActivity.class);
+//                        //intent.putExtra("FONT_ID", font.getId())
+//                        intent.putExtra("FONT_NAME", fontName);
+//                        startActivity(intent);
+//                    }
+//                });
+//                view.setOnLongClickListener(new View.OnLongClickListener() {
+//                    @Override
+//                    public boolean onLongClick(View view) {
+//                        return false;
+//                    }
+//                });
                 break;
             case IN_PROCESSING:
                 Font font = fontList.get(index);

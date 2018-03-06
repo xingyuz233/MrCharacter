@@ -23,6 +23,8 @@ public class FontList {
     private static List<Font> proccessingFontList;
     private static List<Font> finishedFontList;
 
+    private static final String GET_FONT_ORIGIN_ADDRESS = "http://10.0.2.2:8080/get_font.php";
+
     private static boolean editingLoaded, remoteLoaded;
 
     //本地字体
@@ -80,20 +82,21 @@ public class FontList {
 
 
     //服务器字体
-    public static boolean initServerFontList(String address, final Context context, final Runnable callback) {
+    public static boolean initServerFontList(final Context context, final Runnable callback) {
         if (!remoteLoaded) {
-            remoteLoaded = true;
             try {
-                HttpUtil.sendGet(address, null, new HttpCallbackListener() {
+                HttpUtil.sendGet(GET_FONT_ORIGIN_ADDRESS, null, new HttpCallbackListener() {
                     @Override
                     public void onFinish(String response) {
                         // SessionID.getInstance().setUser(user);
                         Gson gson = new Gson();
+                        System.out.println("response-----" + response);
                         List<Font> fontList = gson.fromJson(response, new TypeToken<List<Font>>() {
                         }.getType());
 
                         proccessingFontList = FontList.getProcessingFontList(fontList);
                         finishedFontList = FontList.getFinishedFontList(fontList, context);
+                        remoteLoaded = true;
                         //display(rootView, response);
                         callback.run();
                     }
@@ -118,6 +121,15 @@ public class FontList {
         }
     }
 
+    public static boolean existInEdit(String fontName) {
+        for (String font: editingFontList) {
+            if (font.equals(fontName)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public static boolean addFont(Context context, String fontName) {
         //        Context context = getActivity();
         String path = context.getFilesDir().getAbsolutePath();
@@ -134,12 +146,29 @@ public class FontList {
         }
     }
 
+
+
     public static List<Font> getProcessingFontList() {
         return proccessingFontList;
     }
 
     public static List<Font> getFinishedFontList() {
         return finishedFontList;
+    }
+
+    public static boolean renameEditingFont(Context context, String fontName, String newFontName) {
+        String path = context.getFilesDir().getAbsolutePath();
+//            String path = Environment.getExternalStorageDirectory().getAbsolutePath();
+        System.out.println(path);
+        File file = new File(path + "/" + user + "/" + fontName);
+        File newFile = new File(path + "/" + user + "/" + newFontName);
+        if (file.exists()) {
+            file.renameTo(newFile);
+            return true;
+        }
+        else {
+            return false;
+        }
     }
 }
 

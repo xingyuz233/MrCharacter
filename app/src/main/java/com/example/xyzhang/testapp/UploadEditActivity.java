@@ -1,9 +1,13 @@
 package com.example.xyzhang.testapp;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MotionEvent;
@@ -12,12 +16,16 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.xyzhang.testapp.util.Saver;
 import com.example.xyzhang.testapp.util.SessionID;
+import com.example.xyzhang.testapp.util.UploadFileAsync;
 
 import java.io.File;
 import java.lang.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class UploadEditActivity extends AppCompatActivity implements View.OnClickListener{
 
@@ -33,6 +41,7 @@ public class UploadEditActivity extends AppCompatActivity implements View.OnClic
     TextView mBackBtn;
     SeekBar mSeekBar;
     TextView mSeekBarValue;
+    TextView mSubmitBtn;
 
     boolean editable;
     boolean edited;
@@ -52,6 +61,8 @@ public class UploadEditActivity extends AppCompatActivity implements View.OnClic
 
         mSeekBar = (SeekBar) findViewById(R.id.seekBar);
         mSeekBarValue = (TextView) findViewById(R.id.seekBarValue);
+
+        mSubmitBtn = (TextView) findViewById(R.id.submitBtn);
         display();
     }
 
@@ -60,12 +71,14 @@ public class UploadEditActivity extends AppCompatActivity implements View.OnClic
         mLeftBtn.setOnClickListener(this);
         mRightBtn.setOnClickListener(this);
         mBackBtn.setOnClickListener(this);
+        mSubmitBtn.setOnClickListener(this);
 
         mSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
                 id = i;
                 mSeekBarValue.setText("页数: "+(i+1));
+                display();
             }
 
             @Override
@@ -78,9 +91,12 @@ public class UploadEditActivity extends AppCompatActivity implements View.OnClic
                 display();
             }
         });
+
     }
 
     private void display() {
+        //进度条更新
+        mSeekBar.setProgress(id);
         //展示标准字体
         mCharacter.setText(String.valueOf(Character.CHARACTERS.charAt(id)));
         //展示编辑
@@ -175,9 +191,100 @@ public class UploadEditActivity extends AppCompatActivity implements View.OnClic
                 }
                 finish();
                 break;
-
+            case R.id.submitBtn:
+                upload(this);
         }
 
     }
+
+    private void upload(Context context) {
+
+//        Context context = getActivity();
+        String path = context.getFilesDir().getAbsolutePath();
+//            String path = Environment.getExternalStorageDirectory().getAbsolutePath();
+        System.out.println(path);
+
+        String fontPath = path + "/" + user + "/" + fontName;
+        File file = new File(fontPath);
+        if (!file.exists()) {
+            System.out.println(file.mkdirs());
+        }
+        File[] files = file.listFiles();
+
+        String[] picArray = new String[files.length];
+        for (int i = 0; i < picArray.length; i++) {
+            picArray[i] = files[i].getName();
+        }
+
+        /*
+        AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+        dialog.setTitle("确定要退出吗？");
+        dialog.setView();
+        dialog.setCancelable(false);
+        dialog.show();
+        */
+        // 设置水平进度条
+        final ProgressDialog mProgressDialog = new ProgressDialog(this);
+        mProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+        mProgressDialog.setCancelable(true);
+        mProgressDialog.setCanceledOnTouchOutside(false);
+        mProgressDialog.setIcon(R.mipmap.ic_launcher);
+        mProgressDialog.setTitle("提示");
+
+        mProgressDialog.setButton(DialogInterface.BUTTON_POSITIVE, "确定",
+                new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // TODO Auto-generated method stub
+                        Toast.makeText(UploadEditActivity.this, "确定", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+        mProgressDialog.setMessage("上传中...");
+        mProgressDialog.show();
+        /*
+        new Thread(new Runnable() {
+
+            @Override
+            public void run() {
+                // TODO Auto-generated method stub
+                while (mProgressDialog.getProgress() < 100) {
+
+                }
+
+                // 在进度条走完时删除Dialog
+                mProgressDialog.dismiss();
+            }
+        }).start();
+        */
+
+
+        new UploadFileAsync(getFilesDir().getAbsolutePath() + "/" +
+                user + "/" + fontName + "/", fontName) {
+            @Override
+            protected void onPostExecute(String result) {
+                System.out.println(result);
+                mProgressDialog.setProgress(100);
+                mProgressDialog.dismiss();
+                Toast.makeText(UploadEditActivity.this, "提交成功", Toast.LENGTH_LONG);
+                finish();
+
+
+            }
+
+            @Override
+            protected void onProgressUpdate(Double... values) {
+                System.out.println("progress " + values[0]);
+                mProgressDialog.setProgress((int)(values[0]*100));
+
+            }
+
+        }.execute(picArray);
+
+
+    }
+
+
 
 }
