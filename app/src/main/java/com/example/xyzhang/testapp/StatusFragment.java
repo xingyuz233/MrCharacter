@@ -201,8 +201,12 @@ public class StatusFragment extends Fragment {
 
     @Override
     public boolean onContextItemSelected(MenuItem item) {
+        if (status != 0) {
+            return false;
+        }
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
         int index = info.position;
+        System.out.println("status ------" + status);
         final String fontName = fontNameList.get(index);
         switch (item.getItemId()) {
             case R.id.menuDelete: {
@@ -304,14 +308,21 @@ public class StatusFragment extends Fragment {
         }
     }
 
-    private void inflateItem(View view, final int index) {
+    private View[] inflateItem(View view, final int index, View[] holder) {
         switch (status) {
             case IN_EDIT:
+                TextView txtTitle;
+                ImageView imgFont;
+                if (holder == null) {
+                    txtTitle = view.findViewById(R.id.txtTitle);
+                    imgFont = view.findViewById(R.id.imgFont);
+                } else {
+                    txtTitle = (TextView) holder[0];
+                    imgFont = (ImageView) holder[1];
+                }
                 final String fontName = fontNameList.get(index);
-                TextView txtTitle = view.findViewById(R.id.txtTitle);
                 txtTitle.setText(fontName);
 
-                ImageView imgFont = view.findViewById(R.id.imgFont);
                 String firstFontPic = getActivity().getFilesDir().getAbsolutePath() + "/" + SessionID.getInstance().getUser() + "/" + fontName + "/" + "0.png";
                 File file = new File(firstFontPic);
 
@@ -323,26 +334,52 @@ public class StatusFragment extends Fragment {
                     imgFont.setImageURI(null);
                 }
 
-                break;
+                if (holder == null)
+                    return new View[]{txtTitle, imgFont};
+                else
+                    return null;
             case IN_PROCESSING:
+
+                TextView txtTitleProgress;
+                ProgressBar progressBar;
+                TextView txtPercentage;
+                if (holder == null) {
+                    txtTitleProgress = view.findViewById(R.id.txtTitleProgressing);
+                    progressBar = view.findViewById(R.id.prgProgressing);
+                    txtPercentage = view.findViewById(R.id.txtPercentage);
+                } else {
+                    txtTitleProgress = (TextView) holder[0];
+                    progressBar = (ProgressBar) holder[1];
+                    txtPercentage = (TextView) holder[2];
+                }
+
                 Font font = fontList.get(index);
-                TextView txtTitleProgress = view.findViewById(R.id.txtTitleProgressing);
                 txtTitleProgress.setText(font.getName());
 
-                ProgressBar progressBar = view.findViewById(R.id.prgProgressing);
                 progressBar.setProgress((int) (font.getProgress() * 100));
 
-                TextView txtPercentage = view.findViewById(R.id.txtPercentage);
                 txtPercentage.setText(MessageFormat.format("{0}{1}",
                         font.getProgress() * 100, getString(R.string.percentage_mark)));
-                break;
-            case FINISHED:
-                final Font fontFinished = fontList.get(index);
-                TextView txtTitleFinished = view.findViewById(R.id.txtTitleFinished);
-                txtTitleFinished.setText(fontFinished.getName());
 
-                final ProgressBar prgDownload = view.findViewById(R.id.prgDownload);
-                final Button btnDownload = view.findViewById(R.id.btnDownload);
+                if (holder == null)
+                    return new View[]{txtTitleProgress, progressBar, txtPercentage};
+                else
+                    return null;
+            case FINISHED:
+                TextView txtTitleFinished;
+                final ProgressBar prgDownload;
+                final Button btnDownload;
+                if (holder == null) {
+                    txtTitleFinished = view.findViewById(R.id.txtTitleFinished);
+                    prgDownload = view.findViewById(R.id.prgDownload);
+                    btnDownload = view.findViewById(R.id.btnDownload);
+                } else {
+                    txtTitleFinished = (TextView) holder[0];
+                    prgDownload = (ProgressBar) holder[1];
+                    btnDownload = (Button) holder[2];
+                }
+                final Font fontFinished = fontList.get(index);
+                txtTitleFinished.setText(fontFinished.getName());
                 prgDownload.setVisibility(View.GONE);
 
                 if (fontFinished.isDownloaded()) {
@@ -381,9 +418,12 @@ public class StatusFragment extends Fragment {
                     });
                 }
 
-                break;
+                if (holder == null)
+                    return new View[]{txtTitleFinished, prgDownload, btnDownload};
+                else
+                    return null;
         }
-
+        return null;
     }
 
     private class FontListAdapter extends BaseAdapter {
@@ -412,8 +452,11 @@ public class StatusFragment extends Fragment {
             if (view == null) {
                 System.out.println("...... to inflate " + i + " " + (view == null));
                 view = inflater.inflate(getLayoutRes(), null);
+                View[] holder = inflateItem(view, i, null);
+                view.setTag(holder);
+            } else {
+                inflateItem(view, i, (View[]) view.getTag());
             }
-            inflateItem(view, i);
             return view;
         }
     }
