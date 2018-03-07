@@ -28,7 +28,6 @@ import java.util.Date;
 import java.util.List;
 
 
-
 public class HomeFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
 
@@ -79,6 +78,8 @@ public class HomeFragment extends Fragment {
 
             }
         });
+        System.out.println(Arrays.toString(files));
+        System.out.println(Arrays.asList(files));
 
         return Arrays.asList(files);
 
@@ -87,14 +88,14 @@ public class HomeFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        fontList = getFonts();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+
+        fontList = getFonts();
 
 
         View rootView = inflater.inflate(R.layout.fragment_home, container, false);
@@ -138,13 +139,14 @@ public class HomeFragment extends Fragment {
         mSpinner = rootView.findViewById(R.id.chooseFontSpinner);
 
         List<String> fontNameList = new ArrayList<>();
-        for (File font : fontList) {
-            fontNameList.add(font.getName());
-        }
+        if (fontList != null)
+            for (File font : fontList) {
+                fontNameList.add(font.getName());
+            }
         ArrayAdapter<String> spinAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, fontNameList);
         mSpinner.setAdapter(spinAdapter);
 
-        if (!fontList.isEmpty()) {
+        if (fontList != null && !fontList.isEmpty()) {
             mSpinner.setSelection(0, true);
         } else {
             mSpinner.setEnabled(false);

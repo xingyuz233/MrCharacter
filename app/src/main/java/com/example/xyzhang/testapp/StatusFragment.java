@@ -305,25 +305,29 @@ public class StatusFragment extends Fragment {
     }
 
     private void inflateItem(View view, final int index) {
-        TextView txtTitle;
         switch (status) {
             case IN_EDIT:
                 final String fontName = fontNameList.get(index);
-                txtTitle = view.findViewById(R.id.txtTitle);
+                TextView txtTitle = view.findViewById(R.id.txtTitle);
                 txtTitle.setText(fontName);
 
                 ImageView imgFont = view.findViewById(R.id.imgFont);
                 String firstFontPic = getActivity().getFilesDir().getAbsolutePath() + "/" + SessionID.getInstance().getUser() + "/" + fontName + "/" + "0.png";
                 File file = new File(firstFontPic);
+
+                System.out.println("inflating " + index + fontName + ": " + file.exists());
                 if (file.exists()) {
+                    System.out.println("set uri for " + index);
                     imgFont.setImageURI(Uri.fromFile(file));
+                } else {
+                    imgFont.setImageURI(null);
                 }
 
                 break;
             case IN_PROCESSING:
                 Font font = fontList.get(index);
-                txtTitle = view.findViewById(R.id.txtTitleProgressing);
-                txtTitle.setText(font.getName());
+                TextView txtTitleProgress = view.findViewById(R.id.txtTitleProgressing);
+                txtTitleProgress.setText(font.getName());
 
                 ProgressBar progressBar = view.findViewById(R.id.prgProgressing);
                 progressBar.setProgress((int) (font.getProgress() * 100));
@@ -334,8 +338,8 @@ public class StatusFragment extends Fragment {
                 break;
             case FINISHED:
                 final Font fontFinished = fontList.get(index);
-                txtTitle = view.findViewById(R.id.txtTitleFinished);
-                txtTitle.setText(fontFinished.getName());
+                TextView txtTitleFinished = view.findViewById(R.id.txtTitleFinished);
+                txtTitleFinished.setText(fontFinished.getName());
 
                 final ProgressBar prgDownload = view.findViewById(R.id.prgDownload);
                 final Button btnDownload = view.findViewById(R.id.btnDownload);
@@ -404,8 +408,11 @@ public class StatusFragment extends Fragment {
 
         @Override
         public View getView(int i, View view, ViewGroup viewGroup) {
-            if (view == null)
+            System.out.println("trying to inflate " + i + " " + (view == null));
+            if (view == null) {
+                System.out.println("...... to inflate " + i + " " + (view == null));
                 view = inflater.inflate(getLayoutRes(), null);
+            }
             inflateItem(view, i);
             return view;
         }

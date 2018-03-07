@@ -9,7 +9,11 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -41,6 +45,12 @@ public class FontList {
             System.out.println(file.mkdirs());
         }
         File[] files = file.listFiles();
+        Arrays.sort(files, new Comparator<File>() {
+            @Override
+            public int compare(File file, File t1) {
+                return (int) (t1.lastModified() - file.lastModified());
+            }
+        });
         for (File f : files) {
             newFontList.add(f.getName());
         }
@@ -157,7 +167,7 @@ public class FontList {
         File file = new File(path + "/" + user + "/" + fontName);
         if (!file.exists()) {
             System.out.println(file.mkdirs());
-            editingFontList.add(fontName);
+            editingFontList.add(0, fontName);
             return true;
         } else {
             return false;
