@@ -167,6 +167,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
                 newView.setVisibility(View.VISIBLE);
                 progressAnimator(newView);
                 view.setVisibility(View.GONE);
+                login();
 
             }
 
@@ -203,7 +204,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
                 0.5f, 1f);
         ObjectAnimator animator3 = ObjectAnimator.ofPropertyValuesHolder(view,
                 animator, animator2);
-        animator3.setDuration(500);
+        animator3.setDuration(3000);
         animator3.setInterpolator(new JellyInterpolator());
         animator3.start();
         animator3.addListener(new Animator.AnimatorListener() {
@@ -214,7 +215,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
 
             @Override
             public void onAnimationEnd(Animator animator) {
-                login();
+
             }
 
             @Override
