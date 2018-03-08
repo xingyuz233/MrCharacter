@@ -26,6 +26,7 @@ import android.widget.TextView;
 
 import com.example.xyzhang.testapp.util.DownloadFileAsync;
 import com.example.xyzhang.testapp.util.SessionID;
+import com.readystatesoftware.viewbadger.BadgeView;
 
 import java.io.File;
 import java.text.MessageFormat;
@@ -121,7 +122,7 @@ public class StatusFragment extends Fragment {
                     AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
                     final EditText edit = new EditText(dialog.getContext());
 
-                    dialog.setTitle("请输入字体名称");
+                    dialog.setTitle(R.string.fontNamePrompt);
                     dialog.setView(edit);
 
                     dialog.setCancelable(false);
@@ -132,7 +133,7 @@ public class StatusFragment extends Fragment {
                             if (!FontList.addFont(getActivity(), edit.getText().toString())) {
 
                                 AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
-                                dialog.setTitle("该字体已经存在！");
+                                dialog.setTitle(R.string.fontAlreadyExists);
 
                                 dialog.setCancelable(false);
                                 dialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -244,7 +245,7 @@ public class StatusFragment extends Fragment {
                 edit.setText(fontName);
 
                 dialog.setCancelable(false);
-                dialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                dialog.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
 
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
@@ -255,7 +256,7 @@ public class StatusFragment extends Fragment {
                             dialog.setTitle(R.string.fontAlreadyExists);
 
                             dialog.setCancelable(false);
-                            dialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            dialog.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
 
@@ -273,7 +274,7 @@ public class StatusFragment extends Fragment {
                     }
 
                 });
-                dialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                dialog.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
 
@@ -356,10 +357,24 @@ public class StatusFragment extends Fragment {
                 Font font = fontList.get(index);
                 txtTitleProgress.setText(font.getName());
 
-                progressBar.setProgress((int) (font.getProgress() * 100));
+                System.out.println("font.getName() = " + font.getName());
+                System.out.println("font.getStatus() = " + font.getStatus());
+                if (font.getStatus() == null) {
+                    progressBar.setVisibility(View.VISIBLE);
+                    progressBar.setProgress((int) (font.getProgress() * 100));
 
-                txtPercentage.setText(MessageFormat.format("{0}{1}",
-                        font.getProgress() * 100, getString(R.string.percentage_mark)));
+                    txtPercentage.setText(MessageFormat.format("{0}{1}",
+                            font.getProgress() * 100, getString(R.string.percentage_mark)));
+                } else {
+                    progressBar.setVisibility(View.GONE);
+                    switch (font.getStatus()) {
+                        case "ttf":
+                            txtPercentage.setText(R.string.fontGeneratingTTF);
+                            break;
+                        case "queuing":
+                            txtPercentage.setText(R.string.fontQueuing);
+                    }
+                }
 
                 if (holder == null)
                     return new View[]{txtTitleProgress, progressBar, txtPercentage};
@@ -382,11 +397,23 @@ public class StatusFragment extends Fragment {
                 txtTitleFinished.setText(fontFinished.getName());
                 prgDownload.setVisibility(View.GONE);
 
+                final BadgeView badgeView;
+                if (fontFinished.isNewAdded()) {
+                    badgeView = new BadgeView(getActivity(), btnDownload);
+                    badgeView.setText(R.string.newAdded);
+                    badgeView.show();
+                } else {
+                    badgeView = new BadgeView(getActivity());
+                }
+
                 if (fontFinished.isDownloaded()) {
                     btnDownload.setText(R.string.downloaded);
                     btnDownload.setClickable(false);
-                    btnDownload.setBackgroundColor(Color.parseColor("#808080"));
+                    btnDownload.setAlpha(.5f);
                 } else {
+                    btnDownload.setText(R.string.download);
+                    btnDownload.setClickable(true);
+                    btnDownload.setAlpha(1);
                     btnDownload.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -404,7 +431,7 @@ public class StatusFragment extends Fragment {
                                     btnDownload.setVisibility(View.VISIBLE);
                                     btnDownload.setText(R.string.downloaded);
                                     btnDownload.setClickable(false);
-                                    btnDownload.setBackgroundColor(Color.parseColor("#808080"));
+                                    btnDownload.setAlpha(.5f);
                                     fontFinished.setDownloaded(true);
                                 }
 
@@ -412,6 +439,11 @@ public class StatusFragment extends Fragment {
                                 public void onPreExecute() {
                                     prgDownload.setVisibility(View.VISIBLE);
                                     btnDownload.setVisibility(View.GONE);
+                                    System.out.println("fontFinished = " + fontFinished.isNewAdded());
+                                    if (fontFinished.isNewAdded()) {
+                                        fontFinished.setNewAdded(false);
+                                        badgeView.hide();
+                                    }
                                 }
                             }).execute(fontFinished.getName(), path);
                         }
@@ -450,7 +482,6 @@ public class StatusFragment extends Fragment {
         public View getView(int i, View view, ViewGroup viewGroup) {
             System.out.println("trying to inflate " + i + " " + (view == null));
             if (view == null) {
-                System.out.println("...... to inflate " + i + " " + (view == null));
                 view = inflater.inflate(getLayoutRes(), null);
                 View[] holder = inflateItem(view, i, null);
                 view.setTag(holder);

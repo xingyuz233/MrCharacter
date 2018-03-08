@@ -20,6 +20,8 @@ public class Font implements Serializable {
     private boolean finished;
     private double progress;
     private boolean downloaded;
+    private String status;
+    private boolean newAdded;
 
 
 
@@ -69,5 +71,21 @@ public class Font implements Serializable {
 
     public void setDownloaded(boolean downloaded) {
         this.downloaded = downloaded;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public boolean isNewAdded() {
+        return newAdded;
+    }
+
+    public void setNewAdded(boolean newAdded) {
+        this.newAdded = newAdded;
     }
 }

@@ -6,11 +6,10 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.SeekBar;
@@ -22,7 +21,6 @@ import com.example.xyzhang.testapp.util.SessionID;
 import com.example.xyzhang.testapp.util.UploadFileAsync;
 
 import java.io.File;
-import java.lang.*;
 
 public class UploadEditActivity extends AppCompatActivity implements View.OnClickListener{
 

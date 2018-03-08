@@ -25,7 +25,11 @@
     <string name="uploading">上传中…</string>
     <string name="ok">确定</string>
     <string name="uploadSuccess">提交成功</string>
-    <string name="fontAlreadyExists">该字体已经存在！</string>
     <string name="deleteConfirm">确认要删除吗？</string>
+    <string name="fontQueuing">正在等待制作</string>
+    <string name="fontGeneratingTTF">正在生成字体</string>
+    <string name="cancel">取消</string>
     <string name="fontNamePrompt">请输入字体名称</string>
+    <string name="fontAlreadyExists">该字体已经存在！</string>
+    <string name="newAdded">新</string>
 </resources>
