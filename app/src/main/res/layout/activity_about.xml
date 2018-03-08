@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.example.xyzhang.testapp.AboutActivity">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#008CC9"
+        android:orientation="horizontal">
+        <TextView
+            android:id="@+id/backBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/ic_chevron_left_white_40dp" />
+
+    </RelativeLayout>
+<TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:padding="10dip"
+    android:text="\n
+    \t介是一款个性化的字体编写智能软件，用户通过客户端将自己的部分文字的书写体上传到服务器，后台通过对字迹分析训练，生产出一套该用户独有的字体库，用户可以下载该字体库到客户端，从而拥有了一个属于自己的个性化字体，本产品可以用于字体的创造，字迹的模仿等实用功能。\n\n
+    \t客户端由登陆注册及功能页面组成，注册账号登陆后，用户就拥有了一个自己的字体库系统，用户可以在本地创建字体，并针对该字体进行每个字的编辑，本项目选取了200个最常用汉字，用户可以选取一些数量的汉字进行编写，编写完成后可以进行上传，服务器收到用户的图片，对用户的字迹开始进行分析并进行训练，这时该字体处于处理中的状态，并在客户端中能够显示处理的进度，当训练结束后，服务器产生该字体所对应的字体库，字体处于已完成的状态，此时客户端可以对字体进行下载，这时用户就可以使用专属于自己的个性化手写体了。
+
+
+
+"
+
+    />
+
+
+</LinearLayout>

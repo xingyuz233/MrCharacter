@@ -22,14 +22,15 @@
             android:layout_height="wrap_content"
             android:layout_gravity="right"
             android:layout_marginBottom="10dp"
-            android:drawableRight="@drawable/ic_close_white_40dp" />
-
+            />
         <LinearLayout
+            android:id="@+id/input_layout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="100dip"
 
             android:background="@drawable/radius_drawable_bg"
             android:orientation="vertical"
+            android:gravity="center"
             android:padding="10dip">
 
 
@@ -92,6 +93,13 @@
                     android:textSize="16sp" />
             </LinearLayout>
         </LinearLayout>
+
+        <include
+            android:id="@+id/layout_progress"
+            android:layout_width="match_parent"
+            android:layout_height="100dip"
+            layout="@layout/layout_progress"
+            android:visibility="gone" />
 
         <TextView
             android:id="@+id/signInBtn"

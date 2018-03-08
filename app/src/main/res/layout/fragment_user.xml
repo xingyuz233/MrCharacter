@@ -27,7 +27,7 @@
 
             </ImageView>
             <TextView
-                android:id="@+id/textView4"
+                android:id="@+id/userName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/user_image"
@@ -48,7 +48,7 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/txt_dea"
+                android:id="@+id/myFontBtn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -62,7 +62,7 @@
                 android:textColor="#666666" />
 
             <TextView
-                android:id="@+id/txt_dea"
+                android:id="@+id/recommendBtn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -76,7 +76,7 @@
                 android:textColor="#666666" />
 
             <TextView
-                android:id="@+id/txt_dea"
+                android:id="@+id/aboutBtn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -90,7 +90,7 @@
                 android:textColor="#666666" />
 
             <TextView
-                android:id="@+id/txt_dea"
+                android:id="@+id/settingBtn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"

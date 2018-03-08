@@ -15,17 +15,18 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/imageButton3"
+            android:id="@+id/deleteBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="right"
             android:layout_marginBottom="10dp"
-            android:drawableRight="@drawable/ic_close_white_40dp" />
+             />
 
         <LinearLayout
+            android:id="@id/input_layout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-
+            android:layout_height="140dip"
+            android:gravity="center"
             android:background="@drawable/radius_drawable_bg"
             android:orientation="vertical"
             android:padding="10dip">
@@ -117,6 +118,12 @@
                     android:textSize="16sp" />
             </LinearLayout>
         </LinearLayout>
+        <include
+            android:id="@+id/layout_progress"
+            android:layout_width="match_parent"
+            android:layout_height="140dip"
+            layout="@layout/layout_progress"
+            android:visibility="gone" />
 
         <TextView
             android:layout_width="match_parent"
@@ -126,7 +133,7 @@
             android:text="By clicking Join now, you agree to User Agreement, Privacy Policy and Cookie Policy.You may get Text Notifications. Learn more."
             android:textColor="#ffffff"
             android:textSize="11sp" />
-        />
+
 
         <TextView
             android:id="@+id/joinNowBtn"

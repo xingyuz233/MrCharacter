@@ -1,11 +1,18 @@
 package com.example.xyzhang.testapp;
 
+import android.animation.Animator;
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
+import android.animation.PropertyValuesHolder;
+import android.animation.ValueAnimator;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.os.Message;
 import android.os.Handler;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -20,6 +27,10 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
     private EditText mPassWordEditText;
     private TextView mSignInBtn;
     private TextView mJoinNowBtn;
+
+    private View mInputLayout;
+    private View progress;
+
     private String originAddress = "http://10.0.2.2:8080/login.php";
     Handler mHandler = new Handler(){
         @Override
@@ -29,6 +40,9 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
                 jumpToInfo();
             }else {
                 //todo
+                mPhoneNumberEditText.setVisibility(View.VISIBLE);
+                mPassWordEditText.setVisibility(View.VISIBLE);
+                recoverInputAnimator(progress, mInputLayout);
                 Toast.makeText(SignInActivity.this, "用户信息不正确！", Toast.LENGTH_LONG).show();
             }
         }
@@ -58,7 +72,12 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.signInBtn:
-                login();
+                if (!isInputValid()) {
+                } else {
+                    mPhoneNumberEditText.setVisibility(View.INVISIBLE);
+                    mPassWordEditText.setVisibility(View.INVISIBLE);
+                    inputAnimator(mInputLayout, progress);
+                }
                 break;
             case R.id.joinNowBtn:
                 jumpToJoinNow();
@@ -68,13 +87,18 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
 
     private boolean isInputValid() {
         //检查用户输入的合法性，这里暂且默认用户输入合法
-        return true;
+        return !(mPhoneNumberEditText.getText().toString().equals("") ||
+                mPassWordEditText.getText().toString().equals(""));
+
     }
     private void initView() {
         mPhoneNumberEditText = (EditText) findViewById(R.id.phoneNumberEditText);
         mPassWordEditText = (EditText) findViewById(R.id.passwordEditText);
         mSignInBtn = (TextView) findViewById(R.id.signInBtn);
         mJoinNowBtn = (TextView) findViewById(R.id.joinNowBtn);
+
+        mInputLayout = findViewById(R.id.input_layout);
+        progress = findViewById(R.id.layout_progress);
     }
 
     private void initEvent() {
@@ -84,9 +108,6 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
 
     public void login() {
         //取得用户输入的账号和密码
-        if (!isInputValid()){
-            return;
-        }
         HashMap<String, String> params = new HashMap<String, String>();
         final String user = mPhoneNumberEditText.getText().toString();
         params.put(User.PHONENUMBER, user);
@@ -112,4 +133,103 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
             e.printStackTrace();
         }
     }
+
+
+    public void inputAnimator(final View view, final View newView) {
+
+
+
+
+
+
+        ObjectAnimator animator2 = ObjectAnimator.ofFloat(view,
+                "scaleX",1f, 0.5f);
+        animator2.setDuration(200);
+        animator2.setInterpolator(new AccelerateDecelerateInterpolator());
+        animator2.start();
+        animator2.addListener(new Animator.AnimatorListener() {
+
+            @Override
+            public void onAnimationStart(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                /**
+                 * 动画结束后，先显示加载的动画，然后再隐藏输入框
+                 */
+                newView.setVisibility(View.VISIBLE);
+                progressAnimator(newView);
+                view.setVisibility(View.GONE);
+
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+        });
+
+    }
+
+    public void recoverInputAnimator(final View newView, final View view) {
+
+        newView.setVisibility(View.GONE);
+        view.setVisibility(View.VISIBLE);
+
+
+        ObjectAnimator animator2 = ObjectAnimator.ofFloat(view, "scaleX", 0.5f,1f );
+        animator2.setDuration(200);
+        animator2.setInterpolator(new AccelerateDecelerateInterpolator());
+        animator2.start();
+
+    }
+
+    /**
+     * 出现进度动画
+     *
+     * @param view
+     */
+    public void progressAnimator(final View view) {
+        PropertyValuesHolder animator = PropertyValuesHolder.ofFloat("scaleX",
+                0.5f, 1f);
+        PropertyValuesHolder animator2 = PropertyValuesHolder.ofFloat("scaleY",
+                0.5f, 1f);
+        ObjectAnimator animator3 = ObjectAnimator.ofPropertyValuesHolder(view,
+                animator, animator2);
+        animator3.setDuration(500);
+        animator3.setInterpolator(new JellyInterpolator());
+        animator3.start();
+        animator3.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animator) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animator) {
+                login();
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animator) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animator) {
+
+            }
+        });
+    }
+
+
+
+
 }

@@ -22,27 +22,19 @@
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
         <activity android:name=".SignInActivity" />
         <activity android:name=".JoinNowActivity" />
         <activity android:name=".SendCodeActivity" />
         <activity android:name=".verify_code" />
-        <activity android:name=".InfoActivity" >
-
-
-
-        </activity>
-        <activity android:name=".HomeDisplayActivity">
-
-        </activity>
-        <activity android:name=".UploadEditActivity">
-        </activity>
-        <activity android:name=".TextPagerActivity">
-
-        </activity>
+        <activity android:name=".InfoActivity"></activity>
+        <activity android:name=".HomeDisplayActivity"></activity>
+        <activity android:name=".UploadEditActivity"></activity>
+        <activity android:name=".TextPagerActivity"></activity>
+        <activity android:name=".AboutActivity"></activity>
     </application>
 
 </manifest>

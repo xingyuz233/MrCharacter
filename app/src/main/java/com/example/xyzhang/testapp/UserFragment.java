@@ -45,6 +45,9 @@ public class UserFragment extends Fragment implements View.OnClickListener {
 
 
     private TextView mLogoutBtn;
+    private TextView mAboutBtn;
+    private TextView mUserName;
+
     private String logoutAddress;
 
 
@@ -139,10 +142,14 @@ public class UserFragment extends Fragment implements View.OnClickListener {
 
     private void initView(View rootView) {
         mLogoutBtn = rootView.findViewById(R.id.logoutBtn);
+        mAboutBtn = rootView.findViewById(R.id.aboutBtn);
+        mUserName = rootView.findViewById(R.id.userName);
+        mUserName.setText(SessionID.getInstance().getUser());
     }
 
     private void initEvent(View rootView) {
-        mLogoutBtn.setOnClickListener((View.OnClickListener) this);
+        mLogoutBtn.setOnClickListener(this);
+        mAboutBtn.setOnClickListener(this);
     }
 
     @Override
@@ -173,6 +180,12 @@ public class UserFragment extends Fragment implements View.OnClickListener {
                     }
                 });
                 dialog.show();
+                break;
+            case R.id.myFontBtn:
+                break;
+            case R.id.aboutBtn:
+                Intent intent = new Intent(getActivity(),  AboutActivity.class);
+                startActivity(intent);
                 break;
 
 
