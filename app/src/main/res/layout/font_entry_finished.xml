@@ -27,13 +27,6 @@
             android:text="TextVIew"
             android:textSize="30sp" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_gravity="center"
-            android:text="TextView" />
-
 
     </LinearLayout>
 
@@ -47,14 +40,15 @@
             android:id="@+id/btnDownload"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginRight="20dp"
             android:layout_gravity="center"
-            android:gravity="center"
             android:layout_weight="1"
+            android:background="@drawable/text_bg2"
+            android:gravity="center"
             android:paddingBottom="5dip"
             android:paddingLeft="5dip"
             android:paddingRight="5dip"
             android:paddingTop="5dip"
-            android:background="@drawable/text_bg2"
             android:text="@string/download"
             android:textColor="#ffffff"
             android:textSize="16sp" />
@@ -64,6 +58,7 @@
             style="?android:attr/progressBarStyleHorizontal"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:layout_marginRight="20dp"
             android:layout_weight="1" />
 
     </LinearLayout>

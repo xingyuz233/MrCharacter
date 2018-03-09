@@ -324,7 +324,7 @@ public class StatusFragment extends Fragment {
                 final String fontName = fontNameList.get(index);
                 txtTitle.setText(fontName);
 
-                String firstFontPic = getActivity().getFilesDir().getAbsolutePath() + "/" + SessionID.getInstance().getUser() + "/" + fontName + "/" + "0.png";
+                String firstFontPic = getActivity().getFilesDir().getAbsolutePath() + "/" + SessionID.getInstance().getUser() + "/" + fontName + "/" + "23383.png";
                 File file = new File(firstFontPic);
 
                 System.out.println("inflating " + index + fontName + ": " + file.exists());
@@ -367,6 +367,7 @@ public class StatusFragment extends Fragment {
                             font.getProgress() * 100, getString(R.string.percentage_mark)));
                 } else {
                     progressBar.setVisibility(View.GONE);
+                    System.out.println("font.getStatus() = " + font.getStatus() + index);
                     switch (font.getStatus()) {
                         case "ttf":
                             txtPercentage.setText(R.string.fontGeneratingTTF);
@@ -397,14 +398,15 @@ public class StatusFragment extends Fragment {
                 txtTitleFinished.setText(fontFinished.getName());
                 prgDownload.setVisibility(View.GONE);
 
-                final BadgeView badgeView;
-                if (fontFinished.isNewAdded()) {
-                    badgeView = new BadgeView(getActivity(), btnDownload);
-                    badgeView.setText(R.string.newAdded);
-                    badgeView.show();
-                } else {
-                    badgeView = new BadgeView(getActivity());
-                }
+//                final BadgeView badgeView;
+//                if (fontFinished.isNewAdded()) {
+//                    badgeView = new BadgeView(getActivity(), btnDownload);
+//                    badgeView.setText(R.string.newAdded);
+//                    badgeView.show();
+//                } else {
+//                    badgeView = new BadgeView(getActivity());
+//                    badgeView.setVisibility(View.GONE);
+//                }
 
                 if (fontFinished.isDownloaded()) {
                     btnDownload.setText(R.string.downloaded);
@@ -433,6 +435,7 @@ public class StatusFragment extends Fragment {
                                     btnDownload.setClickable(false);
                                     btnDownload.setAlpha(.5f);
                                     fontFinished.setDownloaded(true);
+                                    FontList.triggerDownload();
                                 }
 
                                 @Override
@@ -440,10 +443,10 @@ public class StatusFragment extends Fragment {
                                     prgDownload.setVisibility(View.VISIBLE);
                                     btnDownload.setVisibility(View.GONE);
                                     System.out.println("fontFinished = " + fontFinished.isNewAdded());
-                                    if (fontFinished.isNewAdded()) {
-                                        fontFinished.setNewAdded(false);
-                                        badgeView.hide();
-                                    }
+//                                    if (fontFinished.isNewAdded()) {
+//                                        fontFinished.setNewAdded(false);
+//                                        badgeView.hide();
+//                                    }
                                 }
                             }).execute(fontFinished.getName(), path);
                         }

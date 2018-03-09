@@ -28,7 +28,7 @@ public class DownloadFileAsync extends AsyncTask<String, Double, String> {
     protected String doInBackground(String... params) {
         int count;
         try {
-            URL url = new URL("http://10.0.2.2:8080/download_font.php");
+            URL url = new URL("http://35.196.26.218/download_font.php");
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("POST");
             connection.setRequestProperty("Cookie", SessionID.getInstance().getId());

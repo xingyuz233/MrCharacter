@@ -9,8 +9,6 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.io.File;
-import java.nio.file.Files;
-import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -24,14 +22,15 @@ public class FontList {
 
     private static String user = SessionID.getInstance().getUser();
     static List<String> editingFontList;
-    private static List<Font> proccessingFontList;
+    private static List<Font> processingFontList;
     private static List<Font> finishedFontList;
 
-    private static final String GET_FONT_ORIGIN_ADDRESS = "http://10.0.2.2:8080/get_font.php";
+    private static final String GET_FONT_ORIGIN_ADDRESS = "http://35.196.26.218/get_font.php";
 
     private static boolean editingLoaded, remoteLoaded;
 
     private static List<Runnable> observers = new ArrayList<>();
+    private static Runnable downloadObserver;
 
     //本地字体
     private static List<String> getEditingFontList(Context context) {
@@ -97,9 +96,9 @@ public class FontList {
                         System.out.println("response-----" + response);
                         List<Font> fontList = gson.fromJson(response, new TypeToken<List<Font>>() {
                         }.getType());
-                        System.out.println("fontlist-----" + fontList.get(2).isFinished());
+//                        System.out.println("fontlist-----" + fontList.get(2).isFinished());
 
-                        proccessingFontList = FontList.getProcessingFontList(fontList);
+                        processingFontList = FontList.getProcessingFontList(fontList);
                         finishedFontList = FontList.getFinishedFontList(fontList, context);
                         remoteLoaded = true;
                         //display(rootView, response);
@@ -133,6 +132,8 @@ public class FontList {
     }
 
     public static boolean existInEdit(String fontName) {
+        if (editingFontList == null)
+            return false;
         for (String font : editingFontList) {
             if (font.equals(fontName)) {
                 return true;
@@ -141,8 +142,10 @@ public class FontList {
         return false;
     }
 
-    public static boolean existInProccess(String fontName) {
-        for (Font font : proccessingFontList) {
+    public static boolean existInProcess(String fontName) {
+        if (processingFontList == null)
+            return false;
+        for (Font font : processingFontList) {
             if (font.getName().equals(fontName)) {
                 return true;
             }
@@ -151,6 +154,8 @@ public class FontList {
     }
 
     public static boolean existInFinished(String fontName) {
+        if (finishedFontList == null)
+            return false;
         for (Font font : finishedFontList) {
             if (font.getName().equals(fontName)) {
                 return true;
@@ -176,7 +181,7 @@ public class FontList {
 
 
     public static List<Font> getProcessingFontList() {
-        return proccessingFontList;
+        return processingFontList;
     }
 
     public static List<Font> getFinishedFontList() {
@@ -221,6 +226,17 @@ public class FontList {
         else {
             return false;
         }
+    }
+
+    public static void setDownloadObserver(Runnable downloadObserver) {
+        System.out.println("set observer " + downloadObserver);
+        FontList.downloadObserver = downloadObserver;
+    }
+
+    public static void triggerDownload() {
+        System.out.println("downloadObserver = " + downloadObserver);
+        if (downloadObserver != null)
+            downloadObserver.run();
     }
 }
 

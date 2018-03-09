@@ -28,7 +28,7 @@ public class JoinNowActivity extends AppCompatActivity implements View.OnClickLi
     private View mInputLayout;
     private View progress;
 
-    private String originAddress = "http://10.0.2.2:8080/register.php";
+    private String originAddress = "http://35.196.26.218/register.php";
     Handler mHandler = new Handler(){
         @Override
         public void handleMessage(Message msg) {

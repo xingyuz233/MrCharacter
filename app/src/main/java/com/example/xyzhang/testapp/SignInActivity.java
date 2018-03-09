@@ -31,7 +31,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
     private View mInputLayout;
     private View progress;
 
-    private String originAddress = "http://10.0.2.2:8080/login.php";
+    private String originAddress = "http://35.196.26.218/login.php";
     Handler mHandler = new Handler(){
         @Override
         public void handleMessage(Message msg) {

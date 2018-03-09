@@ -22,7 +22,7 @@ import com.example.xyzhang.testapp.util.UploadFileAsync;
 
 import java.io.File;
 
-public class UploadEditActivity extends AppCompatActivity implements View.OnClickListener{
+public class UploadEditActivity extends AppCompatActivity implements View.OnClickListener {
 
     String fontName;
     String user = SessionID.getInstance().getUser();
@@ -40,24 +40,24 @@ public class UploadEditActivity extends AppCompatActivity implements View.OnClic
 
     boolean editable;
     boolean edited;
-    private String originAddress = "http://10.0.2.2:8080/get_pic.php";
+    private String originAddress = "http://35.196.26.218/get_pic.php";
 
     private void initView() {
         Intent intent = getIntent();
         fontName = getIntent().getStringExtra("FONT_NAME");
 
-        mDrawingViewFrameLayout = (FrameLayout) findViewById(R.id.drawingView);
-        mCharacter = (TextView) findViewById(R.id.character);
+        mDrawingViewFrameLayout = findViewById(R.id.drawingView);
+        mCharacter = findViewById(R.id.character);
 
-        mClearBtn = (TextView) findViewById(R.id.clearBtn);
-        mLeftBtn = (TextView) findViewById(R.id.leftBtn);
-        mRightBtn = (TextView) findViewById(R.id.rightBtn);
-        mBackBtn = (TextView) findViewById(R.id.backBtn);
+        mClearBtn = findViewById(R.id.clearBtn);
+        mLeftBtn = findViewById(R.id.leftBtn);
+        mRightBtn = findViewById(R.id.rightBtn);
+        mBackBtn = findViewById(R.id.backBtn);
 
-        mSeekBar = (SeekBar) findViewById(R.id.seekBar);
-        mSeekBarValue = (TextView) findViewById(R.id.seekBarValue);
+        mSeekBar = findViewById(R.id.seekBar);
+        mSeekBarValue = findViewById(R.id.seekBarValue);
 
-        mSubmitBtn = (TextView) findViewById(R.id.submitBtn);
+        mSubmitBtn = findViewById(R.id.submitBtn);
         display();
     }
 
@@ -71,8 +71,12 @@ public class UploadEditActivity extends AppCompatActivity implements View.OnClic
         mSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                if (editable && edited) {
+                    Saver.save(UploadEditActivity.this, mDrawingView.toBitMap(), fontName, "" +
+                            ((int) Character.CHARACTERS.charAt(id)));
+                }
                 id = i;
-                mSeekBarValue.setText("页数: "+(i+1));
+                mSeekBarValue.setText("页数: " + (i + 1));
                 display();
             }
 
@@ -95,7 +99,7 @@ public class UploadEditActivity extends AppCompatActivity implements View.OnClic
         //展示标准字体
         mCharacter.setText(String.valueOf(Character.CHARACTERS.charAt(id)));
         //展示编辑
-       File file = getPicFile();
+        File file = getPicFile();
         if (file == null) {
             clear();
         } else {
@@ -121,7 +125,7 @@ public class UploadEditActivity extends AppCompatActivity implements View.OnClic
             System.out.println(file.mkdirs());
         }
 
-        String src = file.getAbsolutePath() + "/" + id + ".png";
+        String src = file.getAbsolutePath() + "/" + ((int) Character.CHARACTERS.charAt(id)) + ".png";
         File file2 = new File(src);
         System.out.println(file2.getAbsolutePath());
         if (!file2.exists()) {
@@ -163,22 +167,26 @@ public class UploadEditActivity extends AppCompatActivity implements View.OnClic
                 clear();
                 break;
             case R.id.leftBtn:
-                if (editable && edited) {
-                    Saver.save(UploadEditActivity.this, mDrawingView.toBitMap(), fontName, "" + id);
-                }
+//                if (editable && edited) {
+//                    Saver.save(UploadEditActivity.this, mDrawingView.toBitMap(), fontName, "" +
+//                            ((int) Character.CHARACTERS.charAt(id)));
+//                }
                 if (id > 0) {
-                    id--;
+//                    id--;
+                    mSeekBar.setProgress(id - 1);
+//                    display();
                 }
-                display();
                 break;
             case R.id.rightBtn:
-                if (editable && edited) {
-                    Saver.save(UploadEditActivity.this, mDrawingView.toBitMap(), fontName, "" + id);
-                }
+//                if (editable && edited) {
+//                    Saver.save(UploadEditActivity.this, mDrawingView.toBitMap(), fontName, "" +
+//                            ((int) Character.CHARACTERS.charAt(id)));
+//                }
                 if (id < Character.MAX - 1) {
-                    id++;
+//                    id++;
+                    mSeekBar.setProgress(id + 1);
+//                    display();
                 }
-                display();
                 break;
             case R.id.backBtn:
 
@@ -193,8 +201,10 @@ public class UploadEditActivity extends AppCompatActivity implements View.OnClic
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        setResult(2);
         if (editable && edited) {
-            Saver.save(UploadEditActivity.this, mDrawingView.toBitMap(), fontName, "" + id);
+            Saver.save(UploadEditActivity.this, mDrawingView.toBitMap(), fontName, "" +
+                    ((int) Character.CHARACTERS.charAt(id)));
         }
     }
 
@@ -219,7 +229,6 @@ public class UploadEditActivity extends AppCompatActivity implements View.OnClic
         }
 
 
-
         final ProgressDialog mProgressDialog = new ProgressDialog(this);
         mProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
         mProgressDialog.setCancelable(true);
@@ -239,8 +248,7 @@ public class UploadEditActivity extends AppCompatActivity implements View.OnClic
         mProgressDialog.setMessage("上传中...");
 
 
-
-        if (FontList.existInProccess(fontName) || FontList.existInFinished(fontName)) {
+        if (FontList.existInProcess(fontName) || FontList.existInFinished(fontName)) {
             AlertDialog.Builder dialog = new AlertDialog.Builder(this);
 
             dialog.setTitle("该字体已上传，确定要覆盖吗？");
@@ -249,6 +257,10 @@ public class UploadEditActivity extends AppCompatActivity implements View.OnClic
 
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
+                    if (editable && edited) {
+                        Saver.save(UploadEditActivity.this, mDrawingView.toBitMap(), fontName, "" +
+                                ((int) Character.CHARACTERS.charAt(id)));
+                    }
 
                     mProgressDialog.show();
 
@@ -288,8 +300,7 @@ public class UploadEditActivity extends AppCompatActivity implements View.OnClic
                 }
             });
             dialog.show();
-        }
-        else {
+        } else {
         /*
         AlertDialog.Builder dialog = new AlertDialog.Builder(this);
         dialog.setTitle("确定要退出吗？");
@@ -298,7 +309,6 @@ public class UploadEditActivity extends AppCompatActivity implements View.OnClic
         dialog.show();
         */
             // 设置水平进度条
-
 
 
             mProgressDialog.show();
@@ -329,7 +339,6 @@ public class UploadEditActivity extends AppCompatActivity implements View.OnClic
         }
 
     }
-
 
 
 }

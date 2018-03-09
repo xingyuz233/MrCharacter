@@ -138,13 +138,31 @@ public class HomeFragment extends Fragment {
 
         mSpinner = rootView.findViewById(R.id.chooseFontSpinner);
 
-        List<String> fontNameList = new ArrayList<>();
+        final List<String> fontNameList = new ArrayList<>();
         if (fontList != null)
             for (File font : fontList) {
                 fontNameList.add(font.getName());
             }
-        ArrayAdapter<String> spinAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, fontNameList);
+        final ArrayAdapter<String> spinAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, fontNameList);
         mSpinner.setAdapter(spinAdapter);
+
+        FontList.setDownloadObserver(new Runnable() {
+            @Override
+            public void run() {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        fontList = getFonts();
+                        fontNameList.clear();
+                        if (fontList != null)
+                            for (File font : fontList) {
+                                fontNameList.add(font.getName());
+                            }
+                        spinAdapter.notifyDataSetChanged();
+                    }
+                });
+            }
+        });
 
         if (fontList != null && !fontList.isEmpty()) {
             mSpinner.setSelection(0, true);
