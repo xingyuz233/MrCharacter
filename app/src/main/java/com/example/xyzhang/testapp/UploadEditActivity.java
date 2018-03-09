@@ -56,6 +56,7 @@ public class UploadEditActivity extends AppCompatActivity implements View.OnClic
 
         mSeekBar = findViewById(R.id.seekBar);
         mSeekBarValue = findViewById(R.id.seekBarValue);
+        mSeekBar.setMax(Character.MAX - 1);
 
         mSubmitBtn = findViewById(R.id.submitBtn);
         display();
@@ -309,6 +310,10 @@ public class UploadEditActivity extends AppCompatActivity implements View.OnClic
         dialog.show();
         */
             // 设置水平进度条
+            if (editable && edited) {
+                Saver.save(UploadEditActivity.this, mDrawingView.toBitMap(), fontName, "" +
+                        ((int) Character.CHARACTERS.charAt(id)));
+            }
 
 
             mProgressDialog.show();
