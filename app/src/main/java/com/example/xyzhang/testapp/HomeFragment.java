@@ -158,18 +158,30 @@ public class HomeFragment extends Fragment {
                             for (File font : fontList) {
                                 fontNameList.add(font.getName());
                             }
+
+                        if (fontList == null || !fontList.isEmpty()) {
+                            mSpinner.setSelection(0, true);
+                            getPictureBtn.setClickable(true);
+                            getPictureBtn.setAlpha(1);
+                        } else {
+                            mSpinner.setEnabled(false);
+                            getPictureBtn.setClickable(false);
+                            getPictureBtn.setAlpha(.5f);
+                        }
                         spinAdapter.notifyDataSetChanged();
                     }
                 });
             }
         });
 
-        if (fontList != null && !fontList.isEmpty()) {
+        if (fontList == null || !fontList.isEmpty()) {
             mSpinner.setSelection(0, true);
+            getPictureBtn.setClickable(true);
+            getPictureBtn.setAlpha(1);
         } else {
             mSpinner.setEnabled(false);
             getPictureBtn.setClickable(false);
-            getPictureBtn.setBackgroundColor(Color.parseColor("#808080"));
+            getPictureBtn.setAlpha(.5f);
         }
 
         return rootView;

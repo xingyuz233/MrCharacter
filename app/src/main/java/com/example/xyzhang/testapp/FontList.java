@@ -12,7 +12,9 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by xingyu on 2018/3/4.
@@ -29,7 +31,7 @@ public class FontList {
 
     private static boolean editingLoaded, remoteLoaded;
 
-    private static List<Runnable> observers = new ArrayList<>();
+    private static Map<Integer, Runnable> observers = new HashMap<>();
     private static Runnable downloadObserver;
 
     //本地字体
@@ -85,7 +87,7 @@ public class FontList {
     }
 
     //服务器字体
-    public static boolean initServerFontList(final Context context, final Runnable callback, final boolean refresh) {
+    public static boolean initServerFontList(final Context context, final Runnable callback, final boolean refresh, final int index) {
         if (!remoteLoaded || refresh) {
             try {
                 HttpUtil.sendGet(GET_FONT_ORIGIN_ADDRESS, null, new HttpCallbackListener() {
@@ -103,11 +105,12 @@ public class FontList {
                         remoteLoaded = true;
                         //display(rootView, response);
                         if (!refresh) {
-                            observers.add(callback);
-                            if (callback != null)
+                            if (callback != null) {
+                                observers.put(index, callback);
                                 callback.run();
+                            }
                         } else
-                            for (Runnable runnable : observers)
+                            for (Runnable runnable: observers.values())
                                 runnable.run();
                     }
 
@@ -120,6 +123,8 @@ public class FontList {
                 e.printStackTrace();
             }
             return true;
+        } else {
+            observers.put(index, callback);
         }
         return false;
     }

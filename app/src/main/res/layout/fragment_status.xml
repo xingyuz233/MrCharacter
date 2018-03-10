@@ -18,14 +18,23 @@
         android:layout_alignParentBottom="true"
         android:clickable="true"
         android:focusable="true"
-        android:src="@drawable/ic_add_circle_outline_pink_60dp" />
+        android:scaleType="center"
+        app:fabSize="normal"
+        android:src="@drawable/ic_add_circle_outline_pink_60dp"
+        app:backgroundTint="?attr/colorBackgroundFloating" />
 
-    <ListView
-        android:id="@+id/listStatus"
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipeLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true" />
+        android:layout_height="match_parent">
+
+        <ListView
+            android:id="@+id/listStatus"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true" />
+    </android.support.v4.widget.SwipeRefreshLayout>
 
 </RelativeLayout>

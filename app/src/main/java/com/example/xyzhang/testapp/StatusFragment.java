@@ -3,12 +3,12 @@ package com.example.xyzhang.testapp;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
@@ -26,7 +26,6 @@ import android.widget.TextView;
 
 import com.example.xyzhang.testapp.util.DownloadFileAsync;
 import com.example.xyzhang.testapp.util.SessionID;
-import com.readystatesoftware.viewbadger.BadgeView;
 
 import java.io.File;
 import java.text.MessageFormat;
@@ -68,30 +67,16 @@ public class StatusFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_status, container, false);
         ListView listView = view.findViewById(R.id.listStatus);
+        final SwipeRefreshLayout swipeRefreshLayout = view.findViewById(R.id.swipeLayout);
 
         switch (status) {
             case IN_EDIT:
                 FontList.initEditingFontList(getActivity());
                 fontNameList = FontList.editingFontList;
                 System.out.println("fontnamelist" + fontNameList);
+                swipeRefreshLayout.setEnabled(false);
                 break;
             case IN_PROCESSING:
-                if (FontList.initServerFontList(getActivity(), new Runnable() {
-                    @Override
-                    public void run() {
-                        getActivity().runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                fontList = FontList.getProcessingFontList();
-                                adapter.notifyDataSetChanged();
-                            }
-                        });
-                    }
-                }, false))
-                    fontList = new ArrayList<>();
-                else
-                    fontList = FontList.getProcessingFontList();
-                break;
             case FINISHED:
                 if (FontList.initServerFontList(getActivity(), new Runnable() {
                     @Override
@@ -99,20 +84,31 @@ public class StatusFragment extends Fragment {
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                fontList = FontList.getFinishedFontList();
+                                System.out.println("swipeRefreshLayout = " + swipeRefreshLayout);
+                                System.out.println(status);
+                                fontList = getFontList();
                                 adapter.notifyDataSetChanged();
+                                if (swipeRefreshLayout != null && swipeRefreshLayout.isRefreshing())
+                                    swipeRefreshLayout.setRefreshing(false);
                             }
                         });
                     }
-                }, false))
+                }, false, status))
                     fontList = new ArrayList<>();
                 else
-                    fontList = FontList.getFinishedFontList();
+                    fontList = getFontList();
+
+                swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+                    @Override
+                    public void onRefresh() {
+                        FontList.initServerFontList(getActivity(), null, true, status);
+                    }
+                });
+                break;
         }
         System.out.println(status + "..." + fontList);
         adapter = new FontListAdapter();
         listView.setAdapter(adapter);
-
         FloatingActionButton addButton = view.findViewById(R.id.addButton);
         if (status == IN_EDIT) {
             registerForContextMenu(listView);
@@ -182,15 +178,29 @@ public class StatusFragment extends Fragment {
         return view;
     }
 
+    private List<Font> getFontList() {
+        switch (status) {
+            case IN_PROCESSING:
+                return FontList.getProcessingFontList();
+            case FINISHED:
+                return FontList.getFinishedFontList();
+            default:
+                return null;
+        }
+    }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         System.out.println("result" + requestCode + " " + resultCode);
         if (requestCode == 1)
             if (resultCode == 1) {
-                FontList.initServerFontList(getActivity(), null, true);
-            } else if (resultCode == 2)
+                FontList.initServerFontList(getActivity(), null, true, status);
+            } else if (resultCode == 2) {
+                System.out.println("fontNameList = " + fontNameList);
+                System.out.println("notifying dataset change");
                 adapter.notifyDataSetChanged();
+            }
     }
 
     @Override
@@ -327,12 +337,12 @@ public class StatusFragment extends Fragment {
                 String firstFontPic = getActivity().getFilesDir().getAbsolutePath() + "/" + SessionID.getInstance().getUser() + "/" + fontName + "/" + "23383.png";
                 File file = new File(firstFontPic);
 
+                imgFont.setImageURI(null);
                 System.out.println("inflating " + index + fontName + ": " + file.exists());
                 if (file.exists()) {
                     System.out.println("set uri for " + index);
+                    System.out.println("imgFont = " + imgFont);
                     imgFont.setImageURI(Uri.fromFile(file));
-                } else {
-                    imgFont.setImageURI(null);
                 }
 
                 if (holder == null)

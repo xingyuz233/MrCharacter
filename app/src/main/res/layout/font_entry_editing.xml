@@ -31,7 +31,8 @@
             android:layout_gravity="center"
             android:layout_weight="1"
             android:text="TextVIew"
-            android:textSize="30sp" />
+            android:textSize="30sp"
+            android:gravity="center"/>
 
 
     </LinearLayout>

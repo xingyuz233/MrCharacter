@@ -40,7 +40,7 @@ public class UploadEditActivity extends AppCompatActivity implements View.OnClic
 
     boolean editable;
     boolean edited;
-    private String originAddress = "http://35.196.26.218/get_pic.php";
+    boolean uploaded;
 
     private void initView() {
         Intent intent = getIntent();
@@ -200,13 +200,14 @@ public class UploadEditActivity extends AppCompatActivity implements View.OnClic
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        setResult(2);
+    public void finish() {
+        if (!uploaded)
+            setResult(2);
         if (editable && edited) {
             Saver.save(UploadEditActivity.this, mDrawingView.toBitMap(), fontName, "" +
                     ((int) Character.CHARACTERS.charAt(id)));
         }
+        super.finish();
     }
 
     private void upload(Context context) {
@@ -275,6 +276,7 @@ public class UploadEditActivity extends AppCompatActivity implements View.OnClic
                             mProgressDialog.dismiss();
                             Toast.makeText(UploadEditActivity.this, "提交成功", Toast.LENGTH_LONG);
                             setResult(1);
+                            uploaded = true;
                             finish();
 
 
@@ -328,6 +330,7 @@ public class UploadEditActivity extends AppCompatActivity implements View.OnClic
                     mProgressDialog.dismiss();
                     Toast.makeText(UploadEditActivity.this, "提交成功", Toast.LENGTH_LONG);
                     setResult(1);
+                    uploaded = true;
                     finish();
 
 
