@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.animation.PropertyValuesHolder;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.os.Message;
@@ -15,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.xyzhang.testapp.util.HttpUtil;
+import com.example.xyzhang.testapp.util.SessionID;
 
 import java.util.HashMap;
 
@@ -33,17 +35,23 @@ public class JoinNowActivity extends AppCompatActivity implements View.OnClickLi
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            if ("OK".equals(msg.obj.toString())){
+            if ("OK".equals(((String[])msg.obj)[0].toString())){
+                SessionID.getInstance().setUser(((String[])msg.obj)[1]);
+                FontList.resetLoaded();
+
+                SharedPreferences sprfMain = getSharedPreferences("User", MODE_PRIVATE);
+                SharedPreferences.Editor editorMain=sprfMain.edit();
+                editorMain.putBoolean("logged",true);
+                editorMain.putString("user", ((String[])msg.obj)[1]);
+                editorMain.commit();
+
                 jumpToSendCode();
-            }else if ("Wrong".equals(msg.obj.toString())){
+            } else {
                 mUserNameEditText.setVisibility(View.VISIBLE);
                 mPassWordEditText.setVisibility(View.VISIBLE);
                 mPhoneNumberEditText.setVisibility(View.VISIBLE);
                 recoverInputAnimator(progress, mInputLayout);
                 Toast.makeText(JoinNowActivity.this, "该用户已存在！", Toast.LENGTH_LONG).show();
-
-            }else {
-                //todo
             }
         }
     };
@@ -109,7 +117,8 @@ public class JoinNowActivity extends AppCompatActivity implements View.OnClickLi
     public void register() {
         //取得用户输入的账号和密码
         HashMap<String, String> params = new HashMap<String, String>();
-        params.put(User.PHONENUMBER, mPhoneNumberEditText.getText().toString());
+        final String user = mPhoneNumberEditText.getText().toString();
+        params.put(User.PHONENUMBER, user);
         params.put(User.USERNAME, mUserNameEditText.getText().toString());
         params.put(User.PASSWORD, mPassWordEditText.getText().toString());
         try {
@@ -117,7 +126,7 @@ public class JoinNowActivity extends AppCompatActivity implements View.OnClickLi
                 @Override
                 public void onFinish(String response) {
                     Message message = new Message();
-                    message.obj = response;
+                    message.obj = new String[]{response, user};
                     mHandler.sendMessage(message);
                 }
 

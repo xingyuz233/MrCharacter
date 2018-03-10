@@ -4,6 +4,8 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
+
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
@@ -19,6 +21,8 @@ import com.example.xyzhang.testapp.util.HttpUtil;
 import com.example.xyzhang.testapp.util.SessionID;
 
 import java.util.HashMap;
+
+import static android.content.Context.MODE_PRIVATE;
 
 
 /**
@@ -166,6 +170,12 @@ public class UserFragment extends Fragment implements View.OnClickListener {
 
                         SessionID.getInstance().setId(null);
                         SessionID.getInstance().setUser(null);
+
+                        SharedPreferences sp = getActivity().getSharedPreferences("User",MODE_PRIVATE);
+                        SharedPreferences.Editor editor = sp.edit();
+                        editor.clear();
+                        editor.commit();
+
                         Intent intent = new Intent(getActivity(),  MainActivity.class);
                         startActivity(intent);
                         getActivity().finish();

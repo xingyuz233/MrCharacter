@@ -6,6 +6,8 @@ import android.animation.ObjectAnimator;
 import android.animation.PropertyValuesHolder;
 import android.animation.ValueAnimator;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.os.Message;
@@ -36,7 +38,17 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            if ("OK".equals(msg.obj.toString())){
+            if ("OK".equals(((String[])msg.obj)[0].toString())){
+
+                SessionID.getInstance().setUser(((String[])msg.obj)[1]);
+                FontList.resetLoaded();
+
+                SharedPreferences sprfMain = getSharedPreferences("User", MODE_PRIVATE);
+                SharedPreferences.Editor editorMain=sprfMain.edit();
+                editorMain.putBoolean("logged",true);
+                editorMain.putString("user", ((String[])msg.obj)[1]);
+                editorMain.commit();
+
                 jumpToInfo();
             }else {
                 //todo
@@ -116,9 +128,8 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
             HttpUtil.sendPost(originAddress, params,new HttpCallbackListener() {
                 @Override
                 public void onFinish(String response) {
-                    SessionID.getInstance().setUser(user);
                     Message message = new Message();
-                    message.obj = response;
+                    message.obj = new String[]{response, user};
                     mHandler.sendMessage(message);
                 }
 

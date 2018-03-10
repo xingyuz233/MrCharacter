@@ -5,12 +5,16 @@ import android.animation.ObjectAnimator;
 import android.animation.TimeInterpolator;
 import android.animation.ValueAnimator;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+
+import com.example.xyzhang.testapp.util.SessionID;
 
 import java.io.File;
 
@@ -31,6 +35,18 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //在加载布局文件前判断是否登陆过
+        SharedPreferences sprfMain = getSharedPreferences("User", MODE_PRIVATE);
+        //.getBoolean("main",false)；当找不到"main"所对应的键值是默认返回false
+
+        if(sprfMain.getBoolean("logged",false)){
+            SessionID.getInstance().setUser(sprfMain.getString("user", ""));
+            Intent intent=new Intent(MainActivity.this, InfoActivity.class);
+            startActivity(intent);
+            MainActivity.this.finish();
+            return;
+        }
+
         setContentView(R.layout.activity_main);
 
         Button joinNowBtn = (Button) findViewById(R.id.joinNowBtn);

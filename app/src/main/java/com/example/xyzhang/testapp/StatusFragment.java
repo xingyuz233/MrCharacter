@@ -1,11 +1,13 @@
 package com.example.xyzhang.testapp;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -58,13 +60,14 @@ public class StatusFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        System.out.println("StatusFragment.onCreate");
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        System.out.println("StatusFragment.onCreateView" + status + " " + SessionID.getInstance().getUser());
         View view = inflater.inflate(R.layout.fragment_status, container, false);
         ListView listView = view.findViewById(R.id.listStatus);
         final SwipeRefreshLayout swipeRefreshLayout = view.findViewById(R.id.swipeLayout);
@@ -429,8 +432,8 @@ public class StatusFragment extends Fragment {
                     btnDownload.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            String path = getActivity().getFilesDir().getAbsolutePath() + "/" +
-                                    SessionID.getInstance().getUser() + "/fonts/" + fontFinished.getName() + ".ttf";
+                            String path = getActivity().getFilesDir().getAbsolutePath() + "/fonts/" +
+                                    SessionID.getInstance().getUser() + "/" + fontFinished.getName() + ".ttf";
                             new DownloadFileAsync(new DownloadFileAsync.UpdateTask() {
                                 @Override
                                 public void onProgressUpdate(double progress) {
@@ -503,5 +506,29 @@ public class StatusFragment extends Fragment {
             }
             return view;
         }
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        System.out.println("StatusFragment.onAttach");
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        System.out.println("StatusFragment.onActivityCreated");
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        System.out.println("StatusFragment.onStart");
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        System.out.println("StatusFragment.onResume");
     }
 }

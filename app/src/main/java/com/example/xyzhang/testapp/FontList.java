@@ -22,11 +22,9 @@ import java.util.Map;
 
 public class FontList {
 
-    private static String user = SessionID.getInstance().getUser();
     static List<String> editingFontList;
     private static List<Font> processingFontList;
     private static List<Font> finishedFontList;
-
     private static final String GET_FONT_ORIGIN_ADDRESS = "http://35.196.26.218/get_font.php";
 
     private static boolean editingLoaded, remoteLoaded;
@@ -41,7 +39,7 @@ public class FontList {
         String path = context.getFilesDir().getAbsolutePath();
 //            String path = Environment.getExternalStorageDirectory().getAbsolutePath();
         System.out.println(path);
-        File file = new File(path + "/" + user);
+        File file = new File(path + "/" + SessionID.getInstance().getUser());
         if (!file.exists()) {
             System.out.println(file.mkdirs());
         }
@@ -70,7 +68,7 @@ public class FontList {
     }
 
     private static List<Font> getFinishedFontList(List<Font> fontList, Context context) {
-        String path = context.getFilesDir().getAbsolutePath() + "/" + user + "/fonts";
+        String path = context.getFilesDir().getAbsolutePath() + "/fonts/" + SessionID.getInstance().getUser();
         File file = new File(path);
         if (!file.exists()) {
             System.out.println(file.mkdirs());
@@ -130,6 +128,7 @@ public class FontList {
     }
 
     public static void initEditingFontList(Context context) {
+        System.out.println("editingLoaded = " + editingLoaded + SessionID.getInstance().getUser());
         if (!editingLoaded) {
             editingLoaded = true;
             editingFontList = getEditingFontList(context);
@@ -174,7 +173,7 @@ public class FontList {
         String path = context.getFilesDir().getAbsolutePath();
 //            String path = Environment.getExternalStorageDirectory().getAbsolutePath();
         System.out.println(path);
-        File file = new File(path + "/" + user + "/" + fontName);
+        File file = new File(path + "/" + SessionID.getInstance().getUser() + "/" + fontName);
         if (!file.exists()) {
             System.out.println(file.mkdirs());
             editingFontList.add(0, fontName);
@@ -197,8 +196,8 @@ public class FontList {
         String path = context.getFilesDir().getAbsolutePath();
 //            String path = Environment.getExternalStorageDirectory().getAbsolutePath();
         System.out.println(path);
-        File file = new File(path + "/" + user + "/" + fontName);
-        File newFile = new File(path + "/" + user + "/" + newFontName);
+        File file = new File(path + "/" + SessionID.getInstance().getUser() + "/" + fontName);
+        File newFile = new File(path + "/" + SessionID.getInstance().getUser() + "/" + newFontName);
         if (file.exists()) {
             int index = FontList.editingFontList.indexOf(fontName);
             FontList.editingFontList.set(index, newFontName);
@@ -213,7 +212,7 @@ public class FontList {
         String path = context.getFilesDir().getAbsolutePath();
 //            String path = Environment.getExternalStorageDirectory().getAbsolutePath();
         System.out.println(path);
-        File file = new File(path + "/" + user + "/" + fontName);
+        File file = new File(path + "/" + SessionID.getInstance().getUser() + "/" + fontName);
         if (file.exists()) {
             int index = FontList.editingFontList.indexOf(fontName);
             FontList.editingFontList.remove(fontName);
@@ -242,6 +241,11 @@ public class FontList {
         System.out.println("downloadObserver = " + downloadObserver);
         if (downloadObserver != null)
             downloadObserver.run();
+    }
+
+    public static void resetLoaded() {
+        editingLoaded = false;
+        remoteLoaded = false;
     }
 }
 
